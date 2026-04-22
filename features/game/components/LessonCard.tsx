@@ -2,8 +2,8 @@ import type { ReactNode } from "react";
 import type { Lesson, LessonState } from "../types";
 import { LessonIcon } from "./LessonIcon";
 import { MashrabiyaBand } from "./MashrabiyaBand";
-import { StartButton } from "./StartButton";
 import { Stars } from "./Stars";
+import { StartButton } from "./StartButton";
 
 interface LessonCardProps {
   lesson: Lesson | undefined;
@@ -122,7 +122,7 @@ export function LessonCard({ lesson, onStart }: LessonCardProps) {
           {lesson.description}
         </p>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-5">
+        <div className="grid grid-cols-2 gap-3 mt-5">
           <MetaCell
             label="Est. Time"
             labelAr="الوقت"
