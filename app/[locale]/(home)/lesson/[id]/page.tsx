@@ -1,12 +1,12 @@
 "use client";
 
-import { useParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
-import { useLocale, useTranslations } from "next-intl";
-import { useRouter } from "@/i18n/navigation";
+import { MashrabiyaBand } from "@/features/game/components/MashrabiyaBand";
 import { LESSONS } from "@/features/game/data";
 import { useGame } from "@/features/game/GameContext";
-import { MashrabiyaBand } from "@/features/game/components/MashrabiyaBand";
+import { useRouter } from "@/i18n/navigation";
+import { useLocale, useTranslations } from "next-intl";
+import { useParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 
 export default function LessonPage() {
   const { id } = useParams();
@@ -157,7 +157,6 @@ export default function LessonPage() {
         style={{
           background: "linear-gradient(180deg, #12213F 0%, #0A1628 100%)",
           border: "1px solid rgba(239,51,64,0.33)",
-          boxShadow: "0 30px 80px -30px rgba(239,51,64,0.33)",
           opacity: transitionOut ? 0 : 1,
           transform: transitionOut ? "translateY(-12px)" : "translateY(0)",
           transition: "opacity 0.3s ease, transform 0.3s ease",

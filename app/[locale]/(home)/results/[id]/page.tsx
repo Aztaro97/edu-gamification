@@ -1,12 +1,12 @@
 "use client";
 
-import { Suspense, useEffect, useMemo, useState } from "react";
-import { useParams, useSearchParams } from "next/navigation";
-import { useLocale, useTranslations } from "next-intl";
-import { useRouter } from "@/i18n/navigation";
-import { LESSONS } from "@/features/game/data";
 import { GoldButton } from "@/features/game/components/Atoms";
+import { LESSONS } from "@/features/game/data";
 import { useGame } from "@/features/game/GameContext";
+import { useRouter } from "@/i18n/navigation";
+import { useLocale, useTranslations } from "next-intl";
+import { useParams, useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useMemo, useState } from "react";
 
 function ResultsContent() {
   const { id } = useParams();
@@ -69,7 +69,6 @@ function ResultsContent() {
         style={{
           background: "linear-gradient(180deg, #12213F 0%, #0A1628 100%)",
           border: "1px solid rgba(244,217,122,0.5)",
-          boxShadow: "0 40px 100px -30px rgba(244,217,122,0.4)",
         }}
       >
         <svg

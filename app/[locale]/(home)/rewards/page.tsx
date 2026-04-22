@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { useLocale, useTranslations } from "next-intl";
 import { BadgeMark } from "@/features/game/components/Badge";
 import { BADGES, getBadgeProgress } from "@/features/game/data";
 import { useGame } from "@/features/game/GameContext";
 import type { Badge } from "@/features/game/types";
+import { useLocale, useTranslations } from "next-intl";
+import { useState } from "react";
 
 export default function RewardsPage() {
   const { badges, completedLessons, lessonStars, streak, dailyCompleted, xp } = useGame();
@@ -139,7 +139,7 @@ export default function RewardsPage() {
                 transform: hovered ? "translateY(-4px) scale(1.02)" : "none",
                 boxShadow:
                   hovered && isEarned
-                    ? "0 20px 40px -10px rgba(244,217,122,0.5)"
+                    ? "0 5px 5px -5px rgba(244,217,122,0.5)"
                     : "none",
               }}
             >

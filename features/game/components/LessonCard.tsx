@@ -1,7 +1,7 @@
 "use client";
 
-import type { ReactNode } from "react";
 import { useLocale, useTranslations } from "next-intl";
+import type { ReactNode } from "react";
 import type { Lesson, LessonState } from "../types";
 import { LessonIcon } from "./LessonIcon";
 import { MashrabiyaBand } from "./MashrabiyaBand";
@@ -43,7 +43,6 @@ export function LessonCard({ lesson, onStart }: LessonCardProps) {
       style={{
         background: "linear-gradient(180deg, #12213F 0%, #0A1628 100%)",
         border: `1px solid ${accent}66`,
-        boxShadow: `0 20px 60px -20px ${accent}55`,
       }}
     >
       <div className="px-5 pt-4">

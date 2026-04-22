@@ -18,7 +18,7 @@ export function StartButton({ state, onClick }: StartButtonProps) {
       type="button"
       disabled={disabled}
       onClick={onClick}
-      className="relative group font-display font-bold tracking-[0.15em] text-sm px-7 py-3 rounded-lg overflow-hidden transition-transform active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F4D97A]/80 disabled:cursor-not-allowed"
+      className="relative group font-display font-bold tracking-[0.15em] text-sm px-7 py-3 rounded-lg overflow-hidden transition-transform active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F4D97A]/80 disabled:cursor-not-allowed w-full text-center flex justify-center items-center"
       style={{
         background: disabled
           ? "linear-gradient(180deg, #2B3A55 0%, #1B2A4A 100%)"

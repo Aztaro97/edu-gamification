@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { useLocale, useTranslations } from "next-intl";
-import { useRouter } from "@/i18n/navigation";
 import { useGame } from "@/features/game/GameContext";
 import { GoldButton } from "@/features/game/components/Atoms";
 import { LESSONS } from "@/features/game/data";
+import { useRouter } from "@/i18n/navigation";
+import { useLocale, useTranslations } from "next-intl";
+import { useEffect, useMemo, useState } from "react";
 
 type Stage = "intro" | "playing" | "done";
 
@@ -127,7 +127,6 @@ export default function DailyPage() {
           background:
             "linear-gradient(110deg, #1B2A4A 0%, #0A1628 55%, #3B2514 100%)",
           border: "1px solid rgba(244,217,122,0.45)",
-          boxShadow: "0 30px 60px -20px rgba(244,217,122,0.35)",
         }}
       >
         <svg
