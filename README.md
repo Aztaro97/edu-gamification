@@ -1,4 +1,4 @@
-# edu-gamification
+# Edu-gamification
 
 A bilingual (English/Arabic) gamified learning platform for Grade 4 science — built with Next.js 16, React 19, TypeScript, and Tailwind CSS v4. Designed with UAE Ministry of Education branding and Islamic geometric design elements.
 
