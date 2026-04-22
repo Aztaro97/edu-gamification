@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import type { LessonState } from "../types";
 
 interface StartButtonProps {
@@ -8,30 +9,15 @@ interface StartButtonProps {
 }
 
 export function StartButton({ state, onClick }: StartButtonProps) {
+  const t = useTranslations("startButton");
   const disabled = state === "locked" || state === "completed";
-  const label =
-    state === "completed"
-      ? "REVIEW LESSON"
-      : state === "active"
-        ? "CONTINUE CHALLENGE"
-        : state === "unlocked"
-          ? "START CHALLENGE"
-          : "LOCKED";
-  const labelAr =
-    state === "completed"
-      ? "راجع الدرس"
-      : state === "active"
-        ? "تابع التحدي"
-        : state === "unlocked"
-          ? "ابدأ التحدي"
-          : "مقفل";
+  const label = t(state as "completed" | "active" | "unlocked" | "locked");
 
   return (
     <button
       type="button"
       disabled={disabled}
       onClick={onClick}
-      aria-label={`${label} — ${labelAr}`}
       className="relative group font-display font-bold tracking-[0.15em] text-sm px-7 py-3 rounded-lg overflow-hidden transition-transform active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F4D97A]/80 disabled:cursor-not-allowed"
       style={{
         background: disabled
@@ -58,9 +44,6 @@ export function StartButton({ state, onClick }: StartButtonProps) {
       )}
       <span className="relative flex items-center gap-2">
         <span>{label}</span>
-        <span className="font-arabic text-[#F4D97A]" dir="rtl">
-          {labelAr}
-        </span>
         {!disabled && (
           <svg
             width="16"

@@ -1,40 +1,17 @@
 "use client";
 
 import { useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import { BadgeMark } from "@/features/game/components/Badge";
 import { BADGES, getBadgeProgress } from "@/features/game/data";
 import { useGame } from "@/features/game/GameContext";
 import type { Badge } from "@/features/game/types";
 
-interface BilingualHeaderProps {
-  kicker: string;
-  kickerAr: string;
-  en: string;
-  ar: string;
-}
-
-function BilingualHeader({ kicker, kickerAr, en, ar }: BilingualHeaderProps) {
-  return (
-    <div>
-      <div className="flex items-center gap-2">
-        <div className="font-display text-[10px] tracking-[0.3em] text-[#C8A951] uppercase">
-          {kicker}
-        </div>
-        <div className="font-arabic text-xs text-[#F5EED6]/60" dir="rtl">
-          · {kickerAr}
-        </div>
-      </div>
-      <div className="font-display text-2xl font-bold text-white">{en}</div>
-      <div className="font-arabic text-lg text-[#F5EED6]/80" dir="rtl">
-        {ar}
-      </div>
-    </div>
-  );
-}
-
 export default function RewardsPage() {
   const { badges, completedLessons, lessonStars, streak, dailyCompleted, xp } = useGame();
   const [hoverId, setHoverId] = useState<string | null>(null);
+  const locale = useLocale();
+  const t = useTranslations("rewards");
 
   const earned = BADGES.filter((b) => badges.includes(b.id));
   const locked = BADGES.filter((b) => !badges.includes(b.id));
@@ -54,12 +31,19 @@ export default function RewardsPage() {
 
   return (
     <div>
-      <BilingualHeader
-        kicker="Rewards"
-        kickerAr="الجوائز"
-        en="Badge Collection"
-        ar="مجموعة الأوسمة"
-      />
+      <div>
+        <div className="font-display text-[10px] tracking-[0.3em] text-[#C8A951] uppercase">
+          {t("kicker")}
+        </div>
+        <div
+          className={`text-2xl font-bold text-white ${
+            locale === "ar" ? "font-arabic" : "font-display"
+          }`}
+          dir={locale === "ar" ? "rtl" : undefined}
+        >
+          {t("title")}
+        </div>
+      </div>
 
       {/* Hero */}
       <div
@@ -83,11 +67,13 @@ export default function RewardsPage() {
             <span className="text-[#C8A951] text-3xl">/{BADGES.length}</span>
           </div>
           <div className="flex-1 min-w-[240px]">
-            <div className="font-display text-xl font-bold text-white">
-              Badges Unlocked
-            </div>
-            <div className="font-arabic text-[#F5EED6]/80" dir="rtl">
-              الأوسمة المكتسبة
+            <div
+              className={`text-xl font-bold text-white ${
+                locale === "ar" ? "font-arabic" : "font-display"
+              }`}
+              dir={locale === "ar" ? "rtl" : undefined}
+            >
+              {t("badgesUnlocked")}
             </div>
             <div
               className="mt-3 h-2 rounded-full overflow-hidden"
@@ -117,10 +103,10 @@ export default function RewardsPage() {
               <BadgeMark badge={nextBadge} muted size={48} showLabel={false} />
               <div>
                 <div className="text-[10px] tracking-widest uppercase text-[#C8A951]">
-                  Next Up
+                  {t("nextUp")}
                 </div>
                 <div className="font-display text-sm text-white font-bold">
-                  {nextBadge.name}
+                  {locale === "ar" && nextBadge.nameAr ? nextBadge.nameAr : nextBadge.name}
                 </div>
                 <div className="text-[10px] text-[#F5EED6]/60">
                   {nextBadge.req}
@@ -131,13 +117,14 @@ export default function RewardsPage() {
         </div>
       </div>
 
-      {/* Grid */}
+      {/* Badge Grid */}
       <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
         {BADGES.map((b) => {
           const isEarned = badges.includes(b.id);
           const { current } = getBadgeProgress(b, stats);
           const pct = Math.min(100, (current / b.threshold) * 100);
           const hovered = hoverId === b.id;
+          const displayName = locale === "ar" && b.nameAr ? b.nameAr : b.name;
           return (
             <div
               key={b.id}
@@ -166,14 +153,13 @@ export default function RewardsPage() {
               <div className="relative flex justify-center">
                 <BadgeMark badge={b} muted={!isEarned} size={72} showLabel={false} />
               </div>
-              <div className="relative font-display text-sm font-bold text-white mt-2">
-                {b.name}
-              </div>
               <div
-                className="relative font-arabic text-xs text-[#F5EED6]/70"
-                dir="rtl"
+                className={`relative text-sm font-bold text-white mt-2 ${
+                  locale === "ar" ? "font-arabic" : "font-display"
+                }`}
+                dir={locale === "ar" ? "rtl" : undefined}
               >
-                {b.nameAr}
+                {displayName}
               </div>
               <div className="relative text-[10px] text-[#F5EED6]/60 mt-2">
                 {b.description}
@@ -188,8 +174,7 @@ export default function RewardsPage() {
                       style={{
                         width: `${pct}%`,
                         height: "100%",
-                        background:
-                          "linear-gradient(90deg, #C8A951, #F4D97A)",
+                        background: "linear-gradient(90deg, #C8A951, #F4D97A)",
                         transition: "width 1s ease-out",
                       }}
                     />
@@ -201,7 +186,7 @@ export default function RewardsPage() {
               )}
               {isEarned && (
                 <div className="relative mt-2 text-[9px] text-[#F4D97A] tracking-widest uppercase">
-                  ✓ Earned
+                  ✓ {t("earned")}
                 </div>
               )}
             </div>

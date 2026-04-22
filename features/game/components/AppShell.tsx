@@ -1,12 +1,18 @@
 "use client";
 
+import { useLocale, useTranslations } from "next-intl";
 import { GeometryDefs } from "./GeometryDefs";
 import { Header } from "./Header";
 import React from "react";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
+  const locale = useLocale();
+  const t = useTranslations("footer");
+  const dir = locale === "ar" ? "rtl" : "ltr";
+
   return (
     <div
+      dir={dir}
       className="min-h-screen relative flex flex-col"
       style={{
         background:
@@ -27,14 +33,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <div className="relative max-w-[1440px] mx-auto px-6 pb-16 w-full flex-1 flex flex-col">
         <Header />
 
-        <div className="mt-6">
-          {children}
-        </div>
+        <div className="mt-6">{children}</div>
 
         <footer className="mt-8 flex items-center justify-between text-[10px] text-[#F5EED6]/40 uppercase tracking-[0.3em] flex-wrap gap-2">
-          <span>وطني الإمارات · My UAE</span>
-          <span>Learn · Grow · Lead</span>
-          <span>Ver 1.0 · © 2026</span>
+          <span>{t("country")}</span>
+          <span>{t("motto")}</span>
+          <span>{t("version")}</span>
         </footer>
       </div>
     </div>

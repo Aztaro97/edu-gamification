@@ -1,9 +1,14 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import { LEADERBOARD } from "../data";
 import type { LeaderEntry } from "../types";
 import { Avatar } from "./Avatar";
 import { MashrabiyaBand } from "./MashrabiyaBand";
 
 export function Leaderboard() {
+  const t = useTranslations("leaderboard");
+
   return (
     <section
       aria-label="Weekly leaderboard"
@@ -14,16 +19,11 @@ export function Leaderboard() {
       }}
     >
       <div className="px-5 pt-4 pb-2 flex items-center justify-between">
-        <div>
-          <div className="font-display text-[11px] tracking-[0.25em] text-[#C8A951] uppercase">
-            Leaderboard
-          </div>
-          <div className="font-arabic text-sm text-[#F5EED6]/80" dir="rtl">
-            المتصدرون
-          </div>
+        <div className="font-display text-[11px] tracking-[0.25em] text-[#C8A951] uppercase">
+          {t("title")}
         </div>
         <div className="text-[10px] text-[#F5EED6]/50 uppercase tracking-widest">
-          This Week
+          {t("thisWeek")}
         </div>
       </div>
       <MashrabiyaBand className="px-5" opacity={0.4} />
@@ -41,6 +41,7 @@ interface LeaderRowProps {
 }
 
 function LeaderRow({ entry }: LeaderRowProps) {
+  const t = useTranslations("leaderboard");
   const rankColor =
     entry.rank === 1 ? "#F4D97A" : entry.rank === 2 ? "#EF3340" : "#009A44";
   const tone = entry.rank === 1 ? "gold" : entry.rank === 2 ? "red" : "green";
@@ -95,7 +96,7 @@ function LeaderRow({ entry }: LeaderRowProps) {
                 border: "1px solid rgba(239,51,64,0.5)",
               }}
             >
-              YOU
+              {t("you")}
             </span>
           )}
         </div>

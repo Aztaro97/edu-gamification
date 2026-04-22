@@ -1,7 +1,9 @@
 "use client";
 
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
+import { useRouter } from "@/i18n/navigation";
 import { LESSONS } from "@/features/game/data";
 import { useGame } from "@/features/game/GameContext";
 import { MashrabiyaBand } from "@/features/game/components/MashrabiyaBand";
@@ -9,10 +11,15 @@ import { MashrabiyaBand } from "@/features/game/components/MashrabiyaBand";
 export default function LessonPage() {
   const { id } = useParams();
   const router = useRouter();
+  const locale = useLocale();
+  const t = useTranslations("lesson");
   const { completeLesson } = useGame();
 
   const lessonId = parseInt(id as string, 10);
-  const lesson = useMemo(() => LESSONS.find((l) => l.id === lessonId), [lessonId]);
+  const lesson = useMemo(
+    () => LESSONS.find((l) => l.id === lessonId),
+    [lessonId],
+  );
 
   const [qIdx, setQIdx] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
@@ -30,6 +37,18 @@ export default function LessonPage() {
   const total = lesson.questions.length;
   const q = lesson.questions[qIdx];
   const progressPct = (qIdx / total) * 100;
+  const isAr = locale === "ar";
+
+  const questionText = isAr && q.qAr ? q.qAr : q.q;
+  const choices =
+    q.type === "mcq"
+      ? isAr && q.choicesAr
+        ? q.choicesAr
+        : q.choices ?? []
+      : [
+          { label: isAr ? t("trueLabel") : "TRUE", letter: "✓", idx: 0 },
+          { label: isAr ? t("falseLabel") : "FALSE", letter: "✕", idx: 1 },
+        ];
 
   function handleAnswer(answerIdx: number) {
     if (locked) return;
@@ -74,21 +93,30 @@ export default function LessonPage() {
           style={{ border: "1px solid rgba(200,169,81,0.4)", color: "#C8A951" }}
         >
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <path d="M10 3 L 4 7 L 10 11" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+            <path
+              d="M10 3 L 4 7 L 10 11"
+              stroke="currentColor"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+            />
           </svg>
         </button>
 
         <div className="flex-1">
           <div className="flex items-center justify-between mb-1.5">
             <div className="text-[10px] tracking-[0.25em] uppercase text-[#C8A951]">
-              Question {qIdx + 1} / {total}{" "}
-              <span className="font-arabic" dir="rtl">· سؤال</span>
+              {t("question", { current: qIdx + 1, total })}
             </div>
-            <div className="text-[10px] text-[#F5EED6]/60 tabular-nums">{correctCount} correct</div>
+            <div className="text-[10px] text-[#F5EED6]/60 tabular-nums">
+              {correctCount} {t("correct")}
+            </div>
           </div>
           <div
             className="relative h-2 rounded-full overflow-hidden"
-            style={{ background: "#0A1628", border: "1px solid rgba(200,169,81,0.3)" }}
+            style={{
+              background: "#0A1628",
+              border: "1px solid rgba(200,169,81,0.3)",
+            }}
           >
             <div
               className="absolute inset-y-0 left-0"
@@ -110,8 +138,15 @@ export default function LessonPage() {
         </div>
 
         <div className="shrink-0 text-right">
-          <div className="text-[10px] tracking-[0.25em] uppercase text-[#F4D97A]">{lesson.system}</div>
-          <div className="font-display text-sm text-white">{lesson.title}</div>
+          <div className="text-[10px] tracking-[0.25em] uppercase text-[#F4D97A]">
+            {lesson.system}
+          </div>
+          <div
+            className={`text-sm text-white ${isAr ? "font-arabic" : "font-display"}`}
+            dir={isAr ? "rtl" : undefined}
+          >
+            {isAr ? lesson.titleAr : lesson.title}
+          </div>
         </div>
       </div>
 
@@ -129,7 +164,10 @@ export default function LessonPage() {
           animation: "fadeSlideUp 0.5s cubic-bezier(0.22,1,0.36,1) both",
         }}
       >
-        <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-30" aria-hidden>
+        <svg
+          className="absolute inset-0 w-full h-full pointer-events-none opacity-30"
+          aria-hidden
+        >
           <rect width="100%" height="100%" fill="url(#lattice)" />
         </svg>
         <div className="px-5 pt-4">
@@ -138,51 +176,52 @@ export default function LessonPage() {
 
         <div className="relative px-8 py-8">
           <div className="text-[10px] tracking-[0.3em] uppercase text-[#C8A951] mb-2">
-            {q.type === "mcq" ? "Multiple Choice" : "True or False"}
-            <span className="font-arabic ms-2" dir="rtl">
-              {q.type === "mcq" ? "اختيار من متعدد" : "صح أم خطأ"}
-            </span>
+            {q.type === "mcq" ? t("mcq") : t("tf")}
           </div>
-          <h2 className="font-display text-2xl font-bold text-white leading-snug">{q.q}</h2>
-          {q.qAr && (
-            <h3 className="font-arabic text-lg text-[#F5EED6]/80 mt-2" dir="rtl">
-              {q.qAr}
-            </h3>
-          )}
+          <h2
+            className={`text-2xl font-bold text-white leading-snug ${
+              isAr ? "font-arabic" : "font-display"
+            }`}
+            dir={isAr ? "rtl" : undefined}
+          >
+            {questionText}
+          </h2>
 
           {/* Answers */}
-          <div className={`mt-6 grid ${q.type === "tf" ? "grid-cols-2" : "grid-cols-1"} gap-3`}>
+          <div
+            className={`mt-6 grid ${
+              q.type === "tf" ? "grid-cols-2" : "grid-cols-1"
+            } gap-3`}
+          >
             {q.type === "mcq"
-              ? q.choices?.map((choice, i) => (
+              ? choices.map((choice, i) => (
                   <AnswerButton
                     key={i}
-                    label={choice}
+                    label={choice as string}
                     letter={String.fromCharCode(65 + i)}
                     selected={selected === i}
                     correct={locked && i === q.correct}
                     wrong={locked && selected === i && i !== q.correct}
                     disabled={locked}
                     onClick={() => handleAnswer(i)}
+                    isAr={isAr}
                   />
                 ))
               : (
-                  [
-                    { label: "TRUE", letter: "✓", labelAr: "صح", idx: 0 },
-                    { label: "FALSE", letter: "✕", labelAr: "خطأ", idx: 1 },
-                  ].map(({ label, letter, labelAr, idx }) => (
-                    <AnswerButton
-                      key={idx}
-                      label={label}
-                      letter={letter}
-                      selected={selected === idx}
-                      correct={locked && idx === q.correct}
-                      wrong={locked && selected === idx && idx !== q.correct}
-                      disabled={locked}
-                      onClick={() => handleAnswer(idx)}
-                      tfLabelAr={labelAr}
-                    />
-                  ))
-                )}
+                  choices as Array<{ label: string; letter: string; idx: number }>
+                ).map(({ label, letter, idx }) => (
+                  <AnswerButton
+                    key={idx}
+                    label={label}
+                    letter={letter}
+                    selected={selected === idx}
+                    correct={locked && idx === q.correct}
+                    wrong={locked && selected === idx && idx !== q.correct}
+                    disabled={locked}
+                    onClick={() => handleAnswer(idx)}
+                    isAr={isAr}
+                  />
+                ))}
           </div>
 
           {/* Feedback banner */}
@@ -200,7 +239,9 @@ export default function LessonPage() {
                 style={{
                   background: feedback === "correct" ? "#009A44" : "#EF3340",
                   animation:
-                    feedback === "correct" ? "bouncePop 0.5s ease-out" : "shakeX 0.4s ease-out",
+                    feedback === "correct"
+                      ? "bouncePop 0.5s ease-out"
+                      : "shakeX 0.4s ease-out",
                 }}
               >
                 {feedback === "correct" ? (
@@ -225,16 +266,15 @@ export default function LessonPage() {
                 )}
               </div>
               <div>
-                <div className="font-display text-white font-bold tracking-wider">
-                  {feedback === "correct" ? "EXCELLENT!" : "NOT QUITE"}
-                  <span className="font-arabic ms-2 text-[#F4D97A]" dir="rtl">
-                    {feedback === "correct" ? "ممتاز!" : "حاول مرة أخرى"}
-                  </span>
+                <div
+                  className={`text-white font-bold tracking-wider ${
+                    isAr ? "font-arabic" : "font-display"
+                  }`}
+                >
+                  {feedback === "correct" ? t("excellent") : t("notQuite")}
                 </div>
                 <div className="text-xs text-[#F5EED6]/80">
-                  {feedback === "correct"
-                    ? "+10 XP · Keep going, explorer!"
-                    : "The correct answer is highlighted in green."}
+                  {feedback === "correct" ? t("excellentMsg") : t("notQuiteMsg")}
                 </div>
               </div>
             </div>
@@ -243,7 +283,7 @@ export default function LessonPage() {
       </div>
 
       <div className="mt-4 flex items-center justify-center gap-2 text-[10px] text-[#F5EED6]/50 tracking-widest uppercase">
-        <span>Press A / B / C / D to answer</span>
+        <span>{t("pressKeys")}</span>
       </div>
     </div>
   );
@@ -257,7 +297,7 @@ interface AnswerButtonProps {
   wrong: boolean;
   disabled: boolean;
   onClick: () => void;
-  tfLabelAr?: string;
+  isAr?: boolean;
 }
 
 function AnswerButton({
@@ -268,7 +308,7 @@ function AnswerButton({
   wrong,
   disabled,
   onClick,
-  tfLabelAr,
+  isAr,
 }: AnswerButtonProps) {
   let borderColor = "rgba(200,169,81,0.3)";
   let bg = "rgba(18,33,63,0.6)";
@@ -309,8 +349,8 @@ function AnswerButton({
         animation: correct
           ? "pulseGreen 1.2s ease-out"
           : wrong
-          ? "shakeX 0.4s ease-out"
-          : "none",
+            ? "shakeX 0.4s ease-out"
+            : "none",
       }}
     >
       <div className="flex items-center gap-3">
@@ -327,12 +367,14 @@ function AnswerButton({
           {letter}
         </div>
         <div className="flex-1">
-          <div className="font-display text-base font-semibold">{label}</div>
-          {tfLabelAr && (
-            <div className="font-arabic text-sm text-[#F5EED6]/70" dir="rtl">
-              {tfLabelAr}
-            </div>
-          )}
+          <div
+            className={`text-base font-semibold ${
+              isAr ? "font-arabic" : "font-display"
+            }`}
+            dir={isAr ? "rtl" : undefined}
+          >
+            {label}
+          </div>
         </div>
       </div>
     </button>

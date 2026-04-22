@@ -1,5 +1,7 @@
+"use client";
 
 import React from "react";
+import { useTranslations } from "next-intl";
 import type { Lesson } from "../types";
 
 interface JourneyRibbonProps {
@@ -9,8 +11,10 @@ interface JourneyRibbonProps {
 }
 
 export function JourneyRibbon({ lessons, activeId, onSelect }: JourneyRibbonProps) {
+  const t = useTranslations("journeyRibbon");
   const completed = lessons.filter(l => l.state === "completed").length;
   const pct = (completed / lessons.length) * 100;
+
   return (
     <div className="mt-4 relative rounded-xl overflow-hidden" style={{
       background: "linear-gradient(90deg, rgba(18,33,63,0.8) 0%, rgba(10,22,40,0.8) 100%)",
@@ -18,8 +22,9 @@ export function JourneyRibbon({ lessons, activeId, onSelect }: JourneyRibbonProp
     }}>
       <div className="flex items-center gap-5 px-5 py-3">
         <div className="shrink-0">
-          <div className="font-display text-[10px] tracking-[0.25em] uppercase text-[#C8A951]">Your Journey</div>
-          <div className="font-arabic text-xs text-[#F5EED6]/70" dir="rtl">مسار التعلم</div>
+          <div className="font-display text-[10px] tracking-[0.25em] uppercase text-[#C8A951]">
+            {t("yourJourney")}
+          </div>
         </div>
         <div className="flex-1 flex items-center gap-1.5">
           {lessons.map((l, i) => {
@@ -59,8 +64,10 @@ export function JourneyRibbon({ lessons, activeId, onSelect }: JourneyRibbonProp
           })}
         </div>
         <div className="shrink-0 text-right">
-          <div className="text-[10px] tracking-[0.25em] uppercase text-[#C8A951]">Progress</div>
-          <div className="font-display font-bold text-white tabular-nums text-lg">{Math.round(pct)}<span className="text-[#C8A951] text-sm">%</span></div>
+          <div className="text-[10px] tracking-[0.25em] uppercase text-[#C8A951]">{t("progress")}</div>
+          <div className="font-display font-bold text-white tabular-nums text-lg">
+            {Math.round(pct)}<span className="text-[#C8A951] text-sm">%</span>
+          </div>
         </div>
       </div>
     </div>

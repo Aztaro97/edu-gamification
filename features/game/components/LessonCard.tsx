@@ -1,4 +1,7 @@
+"use client";
+
 import type { ReactNode } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import type { Lesson, LessonState } from "../types";
 import { LessonIcon } from "./LessonIcon";
 import { MashrabiyaBand } from "./MashrabiyaBand";
@@ -17,26 +20,21 @@ const ACCENTS: Record<LessonState, string> = {
   locked: "#2B3A55",
 };
 
-const STATE_LABELS: Record<LessonState, string> = {
-  completed: "COMPLETED",
-  active: "IN PROGRESS",
-  unlocked: "READY TO START",
-  locked: "LOCKED",
-};
-
-const STATE_LABELS_AR: Record<LessonState, string> = {
-  completed: "مكتمل",
-  active: "قيد التقدم",
-  unlocked: "جاهز للبدء",
-  locked: "مقفل",
-};
-
 export function LessonCard({ lesson, onStart }: LessonCardProps) {
+  const t = useTranslations("lessonCard");
+  const locale = useLocale();
+  const isAr = locale === "ar";
+
   if (!lesson) return null;
 
   const accent = ACCENTS[lesson.state];
-  const stateLabel = STATE_LABELS[lesson.state];
-  const stateAr = STATE_LABELS_AR[lesson.state];
+  const stateKey = lesson.state as "completed" | "active" | "unlocked" | "locked";
+  const stateLabel = t(
+    stateKey === "completed" ? "stateCompleted"
+    : stateKey === "active" ? "stateActive"
+    : stateKey === "unlocked" ? "stateUnlocked"
+    : "stateLocked"
+  );
 
   return (
     <article
@@ -89,7 +87,7 @@ export function LessonCard({ lesson, onStart }: LessonCardProps) {
                   className="text-[10px] tracking-[0.25em] font-semibold"
                   style={{ color: accent }}
                 >
-                  LESSON {lesson.id} · {lesson.system.toUpperCase()}
+                  {t("lesson", { id: lesson.id })} · {lesson.system.toUpperCase()}
                 </div>
                 <div
                   className="text-[10px] tracking-[0.2em] px-2 py-0.5 rounded-full"
@@ -100,20 +98,14 @@ export function LessonCard({ lesson, onStart }: LessonCardProps) {
                   }}
                 >
                   {stateLabel}
-                  <span className="font-arabic ms-1.5" dir="rtl">
-                    · {stateAr}
-                  </span>
                 </div>
               </div>
-              <h2 className="font-display text-2xl font-bold text-white mt-1 leading-tight">
-                {lesson.title}
-              </h2>
-              <h3
-                className="font-arabic text-lg text-[#F5EED6]/80 mt-0.5"
-                dir="rtl"
+              <h2
+                className={`text-2xl font-bold text-white mt-1 leading-tight ${isAr ? "font-arabic" : "font-display"}`}
+                dir={isAr ? "rtl" : undefined}
               >
-                {lesson.titleAr}
-              </h3>
+                {isAr ? lesson.titleAr : lesson.title}
+              </h2>
             </div>
           </div>
         </div>
@@ -123,27 +115,10 @@ export function LessonCard({ lesson, onStart }: LessonCardProps) {
         </p>
 
         <div className="grid grid-cols-2 gap-3 mt-5">
-          <MetaCell
-            label="Est. Time"
-            labelAr="الوقت"
-            value={lesson.time}
-          />
-          <MetaCell
-            label="XP Reward"
-            labelAr="نقاط الخبرة"
-            value={`+${lesson.xp}`}
-            valueColor="#F4D97A"
-          />
-          <MetaCell
-            label="Difficulty"
-            labelAr="الصعوبة"
-            custom={<Stars count={3} earned={lesson.difficulty} />}
-          />
-          <MetaCell
-            label="Stars Earned"
-            labelAr="النجوم"
-            custom={<Stars count={3} earned={lesson.starsEarned} />}
-          />
+          <MetaCell label={t("estTime")} value={lesson.time} />
+          <MetaCell label={t("xpReward")} value={`+${lesson.xp}`} valueColor="#F4D97A" />
+          <MetaCell label={t("difficulty")} custom={<Stars count={3} earned={lesson.difficulty} />} />
+          <MetaCell label={t("starsEarned")} custom={<Stars count={3} earned={lesson.starsEarned} />} />
         </div>
 
         <div className="mt-6 flex items-center justify-between gap-4 flex-wrap">
@@ -152,11 +127,11 @@ export function LessonCard({ lesson, onStart }: LessonCardProps) {
             onClick={onStart ? () => onStart(lesson) : undefined}
           />
           <p className="text-[11px] text-[#F5EED6]/60 max-w-[240px] leading-snug">
-            Complete all 3 stars to earn the{" "}
-            <span className="text-[#F4D97A] font-semibold">
-              Falcon Scholar
-            </span>{" "}
-            bonus badge.
+            {t.rich("completeAllStars", {
+              badge: () => (
+                <span className="text-[#F4D97A] font-semibold">{t("falconScholar")}</span>
+              ),
+            })}
           </p>
         </div>
       </div>
@@ -166,19 +141,12 @@ export function LessonCard({ lesson, onStart }: LessonCardProps) {
 
 interface MetaCellProps {
   label: string;
-  labelAr: string;
   value?: string;
   valueColor?: string;
   custom?: ReactNode;
 }
 
-function MetaCell({
-  label,
-  labelAr,
-  value,
-  valueColor = "#F5EED6",
-  custom,
-}: MetaCellProps) {
+function MetaCell({ label, value, valueColor = "#F5EED6", custom }: MetaCellProps) {
   return (
     <div
       className="rounded-lg px-3 py-2"
@@ -189,12 +157,6 @@ function MetaCell({
     >
       <div className="text-[9px] tracking-[0.2em] uppercase text-[#C8A951]/90">
         {label}
-      </div>
-      <div
-        className="text-[9px] font-arabic text-[#F5EED6]/50 -mt-0.5"
-        dir="rtl"
-      >
-        {labelAr}
       </div>
       {value && (
         <div

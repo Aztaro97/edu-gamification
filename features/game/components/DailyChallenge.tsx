@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { useGame } from "../GameContext";
 
 interface Countdown {
@@ -33,6 +34,8 @@ function pad(n: number): string {
 export function DailyChallenge() {
   const [time, setTime] = useState<Countdown>(INITIAL);
   const { dailyCompleted } = useGame();
+  const t = useTranslations("dailyWidget");
+  const tDaily = useTranslations("daily");
 
   useEffect(() => {
     const id = setInterval(() => setTime(tick), 1000);
@@ -64,20 +67,17 @@ export function DailyChallenge() {
           <rect width="140" height="140" fill="url(#mashrabiya)" />
         </svg>
         <div className="relative p-4">
-          <div className="flex items-center gap-2 mb-2">
+          <div className="mb-2">
             <div className="font-display text-[10px] tracking-[0.3em] text-[#F4D97A] uppercase">
-              Daily Challenge
-            </div>
-            <div className="font-arabic text-xs text-[#F5EED6]/70" dir="rtl">
-              · تحدي اليوم
+              {t("title")}
             </div>
           </div>
           <div className="font-display text-base font-bold text-white leading-tight">
-            {dailyCompleted ? "Completed Today ✓" : "Heart Beats 100,000 Times"}
+            {dailyCompleted ? t("completedToday") : tDaily("title")}
           </div>
           <div className="flex items-center justify-between mt-3">
             <div>
-              <div className="text-[9px] tracking-[0.25em] uppercase text-[#C8A951]">Ends in</div>
+              <div className="text-[9px] tracking-[0.25em] uppercase text-[#C8A951]">{t("endsIn")}</div>
               <div
                 className="font-display font-bold text-white tabular-nums"
                 role="timer"
@@ -98,7 +98,7 @@ export function DailyChallenge() {
                 border: "1px solid rgba(244,217,122,0.5)",
               }}
             >
-              <div className="text-[9px] text-[#C8A951] uppercase tracking-widest">Bonus</div>
+              <div className="text-[9px] text-[#C8A951] uppercase tracking-widest">{t("bonus")}</div>
               <div className="font-display font-bold text-[#F4D97A]">+350 XP</div>
             </div>
           </div>

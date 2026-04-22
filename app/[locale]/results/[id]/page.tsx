@@ -1,7 +1,9 @@
 "use client";
 
 import { Suspense, useEffect, useMemo, useState } from "react";
-import { useParams, useSearchParams, useRouter } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
+import { useRouter } from "@/i18n/navigation";
 import { LESSONS } from "@/features/game/data";
 import { GoldButton } from "@/features/game/components/Atoms";
 import { useGame } from "@/features/game/GameContext";
@@ -10,7 +12,10 @@ function ResultsContent() {
   const { id } = useParams();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { xp, level, xpIntoLevel, xpForLevel, nextThreshold, getLessonState } = useGame();
+  const locale = useLocale();
+  const t = useTranslations("results");
+  const { xp, level, xpIntoLevel, xpForLevel, nextThreshold, getLessonState } =
+    useGame();
 
   const lessonId = parseInt(id as string, 10);
   const lesson = LESSONS.find((l) => l.id === lessonId);
@@ -44,14 +49,16 @@ function ResultsContent() {
   const nextLesson = useMemo(
     () =>
       LESSONS.find(
-        (l) => getLessonState(l.id) === "unlocked" || getLessonState(l.id) === "active"
+        (l) =>
+          getLessonState(l.id) === "unlocked" || getLessonState(l.id) === "active",
       ),
-    [getLessonState]
+    [getLessonState],
   );
 
   if (!lesson) return null;
 
   const levelPct = xpForLevel > 0 ? (xpIntoLevel / xpForLevel) * 100 : 0;
+  const isAr = locale === "ar";
 
   return (
     <div className="max-w-3xl mx-auto pt-4 relative">
@@ -95,26 +102,22 @@ function ResultsContent() {
             className="font-display text-[11px] tracking-[0.4em] uppercase text-[#F4D97A] mb-2"
             style={{ animation: "fadeSlideUp 0.6s ease-out" }}
           >
-            Lesson Complete
+            {t("lessonComplete")}
           </div>
           <h1
-            className="font-display text-4xl font-bold text-white"
+            className={`text-4xl font-bold text-white ${
+              isAr ? "font-arabic" : "font-display"
+            }`}
+            dir={isAr ? "rtl" : undefined}
             style={{ animation: "fadeSlideUp 0.7s ease-out" }}
           >
-            Mabrook, Ahmed!
+            {t("congrats")}
           </h1>
-          <h2
-            className="font-arabic text-2xl text-[#F4D97A] mt-1"
-            dir="rtl"
-            style={{ animation: "fadeSlideUp 0.8s ease-out" }}
-          >
-            مبروك، أحمد!
-          </h2>
           <div
             className="text-sm text-[#F5EED6]/70 mt-2"
             style={{ animation: "fadeSlideUp 0.9s ease-out" }}
           >
-            You&apos;ve mastered{" "}
+            {t("mastered")}{" "}
             <span className="text-white font-semibold">{lesson.title}</span>
           </div>
 
@@ -140,7 +143,7 @@ function ResultsContent() {
             ))}
           </div>
           <div className="mt-2 text-[10px] tracking-[0.3em] uppercase text-[#C8A951]">
-            {stars} of 3 Stars Earned
+            {t("starsEarned", { stars })}
           </div>
 
           {/* XP + Score cards */}
@@ -153,7 +156,7 @@ function ResultsContent() {
               }}
             >
               <div className="text-[10px] tracking-[0.25em] uppercase text-[#C8A951]">
-                XP Earned
+                {t("xpEarned")}
               </div>
               <div className="font-display text-3xl font-bold text-[#F4D97A] tabular-nums mt-1">
                 +{xpAnim}
@@ -166,7 +169,9 @@ function ResultsContent() {
                 border: "1px solid rgba(200,169,81,0.3)",
               }}
             >
-              <div className="text-[10px] tracking-[0.25em] uppercase text-[#C8A951]">Score</div>
+              <div className="text-[10px] tracking-[0.25em] uppercase text-[#C8A951]">
+                {t("score")}
+              </div>
               <div className="font-display text-3xl font-bold text-white tabular-nums mt-1">
                 {correct}/{total}
               </div>
@@ -184,10 +189,13 @@ function ResultsContent() {
             <div className="flex items-center justify-between">
               <div>
                 <div className="text-[10px] tracking-[0.25em] uppercase text-[#C8A951]">
-                  Level {level} · Science Explorer
+                  {t("levelLabel", { level })}
                 </div>
                 <div className="text-xs text-[#F5EED6]/60 mt-0.5">
-                  {(nextThreshold - xp).toLocaleString()} XP to Level {level + 1}
+                  {t("xpToLevel", {
+                    xp: (nextThreshold - xp).toLocaleString(),
+                    next: level + 1,
+                  })}
                 </div>
               </div>
               <div className="font-display text-xl font-bold text-white tabular-nums">
@@ -196,7 +204,10 @@ function ResultsContent() {
             </div>
             <div
               className="mt-3 h-2 rounded-full overflow-hidden"
-              style={{ background: "#0A1628", border: "1px solid rgba(200,169,81,0.3)" }}
+              style={{
+                background: "#0A1628",
+                border: "1px solid rgba(200,169,81,0.3)",
+              }}
             >
               <div
                 style={{
@@ -219,7 +230,7 @@ function ResultsContent() {
                 color: "#C8A951",
               }}
             >
-              Back to Map
+              {t("backToMap")}
             </button>
             <GoldButton
               onClick={() => {
@@ -227,7 +238,7 @@ function ResultsContent() {
                 else router.push("/");
               }}
             >
-              Continue Journey →
+              {t("continueJourney")}
             </GoldButton>
           </div>
         </div>
@@ -256,7 +267,7 @@ function Confetti() {
         rotate: Math.random() * 360,
         size: 6 + Math.random() * 6,
       })),
-    []
+    [],
   );
 
   return (

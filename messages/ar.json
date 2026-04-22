@@ -1,0 +1,135 @@
+{
+  "header": {
+    "ministry": "وزارة التعليم · الإمارات",
+    "title": "رحلة المعرفة",
+    "subtitle": "رحلة المعرفة · الصف الرابع · جسم الإنسان",
+    "langToggle": "English",
+    "nav": {
+      "journey": "الرحلة",
+      "profile": "الملف",
+      "rewards": "الجوائز",
+      "daily": "اليومي"
+    }
+  },
+  "footer": {
+    "country": "وطني الإمارات",
+    "motto": "تعلم · انمو · قود",
+    "version": "الإصدار 1.0 · © 2026"
+  },
+  "home": {
+    "chapter": "الفصل الثاني",
+    "chapterTitle": "جسم الإنسان",
+    "progress": "التقدم"
+  },
+  "daily": {
+    "kicker": "تحدي اليوم",
+    "title": "القلب ينبض 100,000 مرة",
+    "tagline": "5 أسئلة · 60 ثانية · +350 نقطة",
+    "startCta": "أجب بسرعة وذكاء",
+    "description": "أتمم تحدي اليوم لكسب نقاط إضافية وفتح شارة حارس الهلال",
+    "endsIn": "ينتهي في",
+    "back": "رجوع",
+    "begin": "ابدأ التحدي",
+    "completed": "أُنجز اليوم",
+    "questionOf": "سؤال {current} / {total}",
+    "completeTitle": "اكتمل التحدي",
+    "bonus": "+350 نقطة مكافأة!",
+    "resultMsg": "أجبت على {correct} من {total} بشكل صحيح. عد غداً!",
+    "backToJourney": "العودة إلى الرحلة"
+  },
+  "rewards": {
+    "kicker": "الجوائز",
+    "title": "مجموعة الأوسمة",
+    "badgesUnlocked": "الأوسمة المكتسبة",
+    "nextUp": "التالي",
+    "earned": "محقق"
+  },
+  "profile": {
+    "kicker": "ملف اللاعب",
+    "playerName": "أحمد المنصوري",
+    "school": "الصف الرابع · مدرسة البيان، أبوظبي",
+    "level": "المستوى {level} · مستكشف العلوم",
+    "backToJourney": "← العودة إلى الرحلة",
+    "viewAll": "عرض الكل →",
+    "xpLabel": "خبرة",
+    "streak": "أيام",
+    "stars": "نجوم",
+    "badges": "أوسمة",
+    "streakThisWeek": "سلسلة الأسبوع",
+    "dayStreak": "أيام متتالية",
+    "learningStats": "إحصائيات التعلم",
+    "lessonsCompleted": "دروس مكتملة",
+    "averageScore": "المتوسط",
+    "totalTime": "الوقت الكلي",
+    "leaderboardRank": "الترتيب",
+    "badgeCollection": "مجموعة الأوسمة"
+  },
+  "lesson": {
+    "mcq": "اختيار من متعدد",
+    "tf": "صح أم خطأ",
+    "correct": "صحيح",
+    "excellent": "ممتاز!",
+    "notQuite": "حاول مرة أخرى",
+    "excellentMsg": "+10 نقطة · استمر، مستكشف!",
+    "notQuiteMsg": "الإجابة الصحيحة محددة باللون الأخضر.",
+    "pressKeys": "اضغط A / B / C / D للإجابة",
+    "trueLabel": "صح",
+    "falseLabel": "خطأ",
+    "question": "سؤال {current} / {total}"
+  },
+  "playerPanel": {
+    "player": "اللاعب",
+    "xp": "خبرة",
+    "xpToLevel": "{remaining} نقطة للمستوى {next}",
+    "badges": "الأوسمة",
+    "earned": "محقق",
+    "level": "المستوى {level}",
+    "streak": "أيام"
+  },
+  "leaderboard": {
+    "title": "المتصدرون",
+    "thisWeek": "هذا الأسبوع",
+    "you": "أنت"
+  },
+  "lessonCard": {
+    "lesson": "درس {id}",
+    "stateCompleted": "مكتمل",
+    "stateActive": "قيد التقدم",
+    "stateUnlocked": "جاهز للبدء",
+    "stateLocked": "مقفل",
+    "estTime": "الوقت",
+    "xpReward": "نقاط الخبرة",
+    "difficulty": "الصعوبة",
+    "starsEarned": "النجوم",
+    "falconScholar": "صقر العلماء",
+    "completeAllStars": "أكمل 3 نجوم لكسب وسام {badge} الإضافي."
+  },
+  "journeyRibbon": {
+    "yourJourney": "مسار التعلم",
+    "progress": "التقدم"
+  },
+  "dailyWidget": {
+    "title": "تحدي اليوم",
+    "completedToday": "أُنجز اليوم ✓",
+    "endsIn": "ينتهي في",
+    "bonus": "مكافأة"
+  },
+  "startButton": {
+    "completed": "مراجعة الدرس",
+    "active": "تابع التحدي",
+    "unlocked": "ابدأ التحدي",
+    "locked": "مقفل"
+  },
+  "results": {
+    "lessonComplete": "اكتملت الدرس",
+    "congrats": "مبروك، أحمد!",
+    "mastered": "لقد أتقنت",
+    "starsEarned": "{stars} من 3 نجوم",
+    "xpEarned": "نقاط مكتسبة",
+    "score": "النتيجة",
+    "levelLabel": "المستوى {level} · مستكشف العلوم",
+    "xpToLevel": "{xp} نقطة للمستوى {next}",
+    "backToMap": "العودة إلى الخريطة",
+    "continueJourney": "متابعة الرحلة →"
+  }
+}

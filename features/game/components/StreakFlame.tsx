@@ -1,8 +1,14 @@
+"use client";
+
+import { useTranslations } from "next-intl";
+
 interface StreakFlameProps {
   count: number;
 }
 
 export function StreakFlame({ count }: StreakFlameProps) {
+  const t = useTranslations("playerPanel");
+
   return (
     <div
       className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full"
@@ -37,11 +43,11 @@ export function StreakFlame({ count }: StreakFlameProps) {
           />
         </path>
       </svg>
-      <span className="font-display font-bold text-[#F4D97A] tabular-nums">
+      <span className="font-display font-bold text-[#F4D97A] tabular-nums" dir="ltr">
         {count}
       </span>
       <span className="text-[10px] text-[#F5EED6]/70 uppercase tracking-wider">
-        day streak
+        {t("streak")}
       </span>
     </div>
   );

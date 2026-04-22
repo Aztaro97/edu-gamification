@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import { DailyChallenge } from "./components/DailyChallenge";
 import { JourneyRibbon } from "./components/JourneyRibbon";
 import { Leaderboard } from "./components/Leaderboard";
@@ -10,14 +11,15 @@ import { PlayerPanel } from "./components/PlayerPanel";
 import { LESSONS, PLAYER } from "./data";
 import type { Lesson } from "./types";
 import { useGame } from "./GameContext";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 
 const DEFAULT_ACTIVE_ID = 3;
 
 export function GameApp() {
   const { xp, nextThreshold, activeLesson: activeIdContext, getLessonState } = useGame();
   const router = useRouter();
-  
+  const t = useTranslations("home");
+
   const activeId = activeIdContext ?? DEFAULT_ACTIVE_ID;
   const [selectedId, setSelectedId] = useState<number>(activeId);
   const [xpPct, setXpPct] = useState<number>(0);
@@ -48,7 +50,7 @@ export function GameApp() {
 
   return (
     <>
-      <JourneyRibbon lessons={LESSONS} activeId={selectedId} onSelect={setSelectedId}/>
+      <JourneyRibbon lessons={LESSONS} activeId={selectedId} onSelect={setSelectedId} />
 
       <div className="grid grid-cols-12 gap-6 mt-6">
         <aside className="col-span-12 md:col-span-4 lg:col-span-3 space-y-5">
@@ -67,16 +69,10 @@ export function GameApp() {
             <div className="absolute top-0 inset-x-0 z-10 flex items-start justify-between px-5 pt-4 pointer-events-none">
               <div className="max-w-[55%]">
                 <div className="font-display text-[10px] tracking-[0.3em] text-[#F4D97A] uppercase">
-                  Chapter 2 · الفصل الثاني
+                  {t("chapter")}
                 </div>
                 <div className="font-display text-xl font-bold text-white drop-shadow">
-                  The Human Body
-                </div>
-                <div
-                  className="font-arabic text-base text-[#F5EED6]/80 drop-shadow"
-                  dir="rtl"
-                >
-                  جسم الإنسان
+                  {t("chapterTitle")}
                 </div>
               </div>
               <div
@@ -84,9 +80,9 @@ export function GameApp() {
                 style={{ border: "1px solid rgba(200,169,81,0.4)" }}
               >
                 <div className="text-[10px] tracking-[0.25em] uppercase text-[#C8A951]">
-                  Progress
+                  {t("progress")}
                 </div>
-                <div className="font-display font-bold text-white text-lg tabular-nums">
+                <div className="font-display font-bold text-white text-lg tabular-nums" dir="ltr">
                   {completedCount} / {LESSONS.length}
                 </div>
               </div>
@@ -101,8 +97,8 @@ export function GameApp() {
 
         <section className="col-span-12 lg:col-span-3 space-y-5">
           <DailyChallenge />
-          <LessonCard 
-            lesson={activeLesson ? { ...activeLesson, state: getLessonState(activeLesson.id) } : undefined} 
+          <LessonCard
+            lesson={activeLesson ? { ...activeLesson, state: getLessonState(activeLesson.id) } : undefined}
             onStart={(lesson) => router.push(`/lesson/${lesson.id}`)}
           />
         </section>

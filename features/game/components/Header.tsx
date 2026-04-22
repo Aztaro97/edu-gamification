@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
+import { usePathname, useRouter, Link } from "@/i18n/navigation";
 import { MashrabiyaBand } from "./MashrabiyaBand";
 import { useGame } from "../GameContext";
 
@@ -10,6 +10,14 @@ type HeaderIconName = "book" | "map" | "trophy" | "user" | "sun";
 export function Header() {
   const pathname = usePathname();
   const { xp } = useGame();
+  const t = useTranslations("header");
+  const locale = useLocale();
+  const router = useRouter();
+
+  function switchLocale() {
+    const next = locale === "en" ? "ar" : "en";
+    router.replace(pathname, { locale: next });
+  }
 
   return (
     <header className="relative">
@@ -23,6 +31,12 @@ export function Header() {
               aria-hidden
               focusable="false"
             >
+              <defs>
+                <linearGradient id="goldGrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stopColor="#F4D97A" />
+                  <stop offset="100%" stopColor="#C8A951" />
+                </linearGradient>
+              </defs>
               <polygon
                 points="26,2 32,8 40,6 42,14 50,20 46,28 50,36 42,40 40,48 32,46 26,50 20,46 12,48 10,40 2,36 6,28 2,20 10,14 12,6 20,8"
                 fill="url(#goldGrad)"
@@ -51,41 +65,120 @@ export function Header() {
           </div>
           <div className="min-w-0">
             <div className="font-display text-[8px] sm:text-[10px] tracking-[0.2em] sm:tracking-[0.3em] uppercase text-[#C8A951] truncate">
-              Ministry of Education · UAE
+              {t("ministry")}
             </div>
             <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mt-1 sm:mt-0">
-              <h1 className="font-display text-lg sm:text-xl font-bold text-white">
-                Rihlat Al Ma&apos;rifah
+              <h1
+                className={`font-bold text-white ${
+                  locale === "ar"
+                    ? "font-arabic text-lg sm:text-xl"
+                    : "font-display text-lg sm:text-xl"
+                }`}
+                dir={locale === "ar" ? "rtl" : undefined}
+              >
+                {t("title")}
               </h1>
-              <span className="font-arabic text-lg sm:text-xl text-[#F4D97A]" dir="rtl">
-                رحلة المعرفة
-              </span>
             </div>
             <div className="text-[10px] sm:text-[11px] text-[#F5EED6]/60 truncate mt-0.5 sm:mt-0">
-              Journey of Knowledge · Grade 4 · The Human Body
+              {t("subtitle")}
             </div>
           </div>
         </div>
-        <nav aria-label="Primary" className="flex items-center gap-2 flex-wrap">
-          <HeaderPill href="/" icon="map" label="Journey" labelAr="الرحلة" active={pathname === "/"} />
-          <HeaderPill href="/profile" icon="user" label="Profile" labelAr="الملف" active={pathname === "/profile"} />
-          <HeaderPill href="/rewards" icon="trophy" label="Rewards" labelAr="الجوائز" active={pathname === "/rewards"} />
-          <HeaderPill href="/daily" icon="sun" label="Daily" labelAr="اليومي" active={pathname === "/daily"} />
+
+        <nav
+          aria-label="Primary"
+          className="flex items-center gap-2 flex-wrap"
+        >
+          <HeaderPill
+            href="/"
+            icon="map"
+            label={t("nav.journey")}
+            active={pathname === "/"}
+            locale={locale}
+          />
+          <HeaderPill
+            href="/profile"
+            icon="user"
+            label={t("nav.profile")}
+            active={pathname === "/profile"}
+            locale={locale}
+          />
+          <HeaderPill
+            href="/rewards"
+            icon="trophy"
+            label={t("nav.rewards")}
+            active={pathname === "/rewards"}
+            locale={locale}
+          />
+          <HeaderPill
+            href="/daily"
+            icon="sun"
+            label={t("nav.daily")}
+            active={pathname === "/daily"}
+            locale={locale}
+          />
+
+          {/* XP badge */}
           <div
-            className="ml-2 flex items-center gap-2 px-3 py-1.5 rounded-full"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-full"
             style={{
-              background: "linear-gradient(90deg, rgba(244,217,122,0.18), rgba(239,51,64,0.12))",
+              background:
+                "linear-gradient(90deg, rgba(244,217,122,0.18), rgba(239,51,64,0.12))",
               border: "1px solid rgba(244,217,122,0.5)",
             }}
           >
-            <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden focusable="false">
-              <polygon points="7,1 9,5 13,5 10,8 11,13 7,10 3,13 4,8 1,5 5,5" fill="#F4D97A" />
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 14 14"
+              aria-hidden
+              focusable="false"
+            >
+              <polygon
+                points="7,1 9,5 13,5 10,8 11,13 7,10 3,13 4,8 1,5 5,5"
+                fill="#F4D97A"
+              />
             </svg>
             <span className="font-display text-[#F4D97A] font-bold tabular-nums text-xs">
               {xp.toLocaleString()}
             </span>
-            <span className="text-[9px] text-[#F5EED6]/70 uppercase tracking-wider">XP</span>
+            <span className="text-[9px] text-[#F5EED6]/70 uppercase tracking-wider">
+              XP
+            </span>
           </div>
+
+          {/* Language toggle */}
+          <button
+            onClick={switchLocale}
+            aria-label="Switch language"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs cursor-pointer transition-all duration-200 hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F4D97A]/60"
+            style={{
+              background: "rgba(200,169,81,0.12)",
+              border: "1px solid rgba(200,169,81,0.4)",
+              color: "#F4D97A",
+            }}
+          >
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 12 12"
+              fill="none"
+              aria-hidden
+            >
+              <circle cx="6" cy="6" r="5" stroke="currentColor" strokeWidth="1.2" />
+              <path
+                d="M6 1 C4.5 3 4.5 9 6 11 M6 1 C7.5 3 7.5 9 6 11"
+                stroke="currentColor"
+                strokeWidth="1.2"
+              />
+              <path d="M1 6 H11" stroke="currentColor" strokeWidth="1.2" />
+            </svg>
+            <span
+              className={locale === "ar" ? "font-sans" : "font-arabic"}
+            >
+              {t("langToggle")}
+            </span>
+          </button>
         </nav>
       </div>
       <MashrabiyaBand opacity={0.5} />
@@ -97,11 +190,11 @@ interface HeaderPillProps {
   href: string;
   icon: HeaderIconName;
   label: string;
-  labelAr: string;
   active?: boolean;
+  locale: string;
 }
 
-function HeaderPill({ href, icon, label, labelAr, active = false }: HeaderPillProps) {
+function HeaderPill({ href, icon, label, active = false, locale }: HeaderPillProps) {
   return (
     <Link
       href={href}
@@ -116,9 +209,11 @@ function HeaderPill({ href, icon, label, labelAr, active = false }: HeaderPillPr
       }}
     >
       <HeaderIcon name={icon} />
-      <span className="font-display tracking-wider uppercase">{label}</span>
-      <span className="font-arabic opacity-70" dir="rtl">
-        {labelAr}
+      <span
+        className={locale === "ar" ? "font-arabic tracking-normal" : "font-display tracking-wider uppercase"}
+        dir={locale === "ar" ? "rtl" : undefined}
+      >
+        {label}
       </span>
     </Link>
   );

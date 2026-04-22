@@ -1,0 +1,135 @@
+{
+  "header": {
+    "ministry": "Ministry of Education · UAE",
+    "title": "Rihlat Al Ma'rifah",
+    "subtitle": "Journey of Knowledge · Grade 4 · The Human Body",
+    "langToggle": "عربي",
+    "nav": {
+      "journey": "Journey",
+      "profile": "Profile",
+      "rewards": "Rewards",
+      "daily": "Daily"
+    }
+  },
+  "footer": {
+    "country": "My UAE",
+    "motto": "Learn · Grow · Lead",
+    "version": "Ver 1.0 · © 2026"
+  },
+  "home": {
+    "chapter": "Chapter 2",
+    "chapterTitle": "The Human Body",
+    "progress": "Progress"
+  },
+  "daily": {
+    "kicker": "Daily Challenge",
+    "title": "The Heart Beats 100,000 Times",
+    "tagline": "5 Questions · 60 Seconds · +350 XP",
+    "startCta": "Answer fast. Answer smart.",
+    "description": "Complete today's challenge to earn bonus XP and unlock the Crescent Keeper badge.",
+    "endsIn": "Ends in",
+    "back": "Back",
+    "begin": "BEGIN CHALLENGE",
+    "completed": "COMPLETED TODAY",
+    "questionOf": "Question {current} / {total}",
+    "completeTitle": "Challenge Complete",
+    "bonus": "+350 XP Bonus!",
+    "resultMsg": "You got {correct} of {total} correct. Come back tomorrow!",
+    "backToJourney": "Back to Journey"
+  },
+  "rewards": {
+    "kicker": "Rewards",
+    "title": "Badge Collection",
+    "badgesUnlocked": "Badges Unlocked",
+    "nextUp": "Next Up",
+    "earned": "Earned"
+  },
+  "profile": {
+    "kicker": "Player Profile",
+    "playerName": "Ahmed Al Mansoori",
+    "school": "Grade 4 · Al Bayan School, Abu Dhabi",
+    "level": "Level {level} · Science Explorer",
+    "backToJourney": "← Back to Journey",
+    "viewAll": "View all →",
+    "xpLabel": "XP",
+    "streak": "Streak",
+    "stars": "Stars",
+    "badges": "Badges",
+    "streakThisWeek": "Streak · This Week",
+    "dayStreak": "Day Streak",
+    "learningStats": "Learning Stats",
+    "lessonsCompleted": "Lessons Completed",
+    "averageScore": "Average Score",
+    "totalTime": "Total Time",
+    "leaderboardRank": "Leaderboard Rank",
+    "badgeCollection": "Badge Collection"
+  },
+  "lesson": {
+    "mcq": "Multiple Choice",
+    "tf": "True or False",
+    "correct": "correct",
+    "excellent": "EXCELLENT!",
+    "notQuite": "NOT QUITE",
+    "excellentMsg": "+10 XP · Keep going, explorer!",
+    "notQuiteMsg": "The correct answer is highlighted in green.",
+    "pressKeys": "Press A / B / C / D to answer",
+    "trueLabel": "TRUE",
+    "falseLabel": "FALSE",
+    "question": "Question {current} / {total}"
+  },
+  "playerPanel": {
+    "player": "Player",
+    "xp": "XP",
+    "xpToLevel": "{remaining} XP to Level {next}",
+    "badges": "Badges",
+    "earned": "earned",
+    "level": "Level {level}",
+    "streak": "Day Streak"
+  },
+  "leaderboard": {
+    "title": "Leaderboard",
+    "thisWeek": "This Week",
+    "you": "YOU"
+  },
+  "lessonCard": {
+    "lesson": "Lesson {id}",
+    "stateCompleted": "COMPLETED",
+    "stateActive": "IN PROGRESS",
+    "stateUnlocked": "READY TO START",
+    "stateLocked": "LOCKED",
+    "estTime": "Est. Time",
+    "xpReward": "XP Reward",
+    "difficulty": "Difficulty",
+    "starsEarned": "Stars Earned",
+    "falconScholar": "Falcon Scholar",
+    "completeAllStars": "Complete all 3 stars to earn the {badge} bonus badge."
+  },
+  "journeyRibbon": {
+    "yourJourney": "Your Journey",
+    "progress": "Progress"
+  },
+  "dailyWidget": {
+    "title": "Daily Challenge",
+    "completedToday": "Completed Today ✓",
+    "endsIn": "Ends in",
+    "bonus": "Bonus"
+  },
+  "startButton": {
+    "completed": "REVIEW LESSON",
+    "active": "CONTINUE CHALLENGE",
+    "unlocked": "START CHALLENGE",
+    "locked": "LOCKED"
+  },
+  "results": {
+    "lessonComplete": "Lesson Complete",
+    "congrats": "Mabrook, Ahmed!",
+    "mastered": "You've mastered",
+    "starsEarned": "{stars} of 3 Stars Earned",
+    "xpEarned": "XP Earned",
+    "score": "Score",
+    "levelLabel": "Level {level} · Science Explorer",
+    "xpToLevel": "{xp} XP to Level {next}",
+    "backToMap": "Back to Map",
+    "continueJourney": "Continue Journey →"
+  }
+}

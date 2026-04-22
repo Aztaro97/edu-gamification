@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { Cinzel, Geist, Geist_Mono, Tajawal } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/components/ThemeProvider";
-import { GameProvider } from "@/features/game";
-import { AppShell } from "@/features/game/components/AppShell";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,29 +34,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
-      lang="en"
       className={`${geistSans.variable} ${geistMono.variable} ${cinzel.variable} ${tajawal.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <GameProvider>
-            <AppShell>
-              {children}
-            </AppShell>
-          </GameProvider>
-        </ThemeProvider>
-      </body>
+      <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );
 }
