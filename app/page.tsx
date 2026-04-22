@@ -1,5 +1,5 @@
-import { GameApp } from "@/features/game";
+import { redirect } from "next/navigation";
 
 export default function Page() {
-  return <GameApp />;
+  redirect("/en");
 }

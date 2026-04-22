@@ -4,26 +4,21 @@ import { type NextRequest, NextResponse } from "next/server";
 
 const intlMiddleware = createMiddleware(routing);
 
-// Cookie name used by better-auth for session tracking
 const SESSION_COOKIE = "better-auth.session_token";
+const PUBLIC_PATHS = new Set(["/login"]);
 
-const PUBLIC_PATHS = ["/login"];
-
-function isPublicPath(pathname: string): boolean {
-  const withoutLocale = pathname.replace(/^\/(en|ar)/, "") || "/";
-  return PUBLIC_PATHS.includes(withoutLocale);
+function stripLocale(pathname: string): string {
+  return pathname.replace(/^\/(en|ar)/, "") || "/";
 }
 
-export default async function middleware(request: NextRequest) {
+export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Let better-auth handle its own API routes
   if (pathname.startsWith("/api/auth")) {
     return NextResponse.next();
   }
 
-  // Public pages (login) don't require auth
-  if (isPublicPath(pathname)) {
+  if (PUBLIC_PATHS.has(stripLocale(pathname))) {
     return intlMiddleware(request);
   }
 

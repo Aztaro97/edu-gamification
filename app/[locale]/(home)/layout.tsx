@@ -1,16 +1,18 @@
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
-import { notFound } from "next/navigation";
+import { headers } from "next/headers";
+import { notFound, redirect } from "next/navigation";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { GameProvider } from "@/features/game";
 import { AppShell } from "@/features/game/components/AppShell";
 import { routing } from "@/i18n/routing";
+import { auth } from "@/lib/auth";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
-export default async function LocaleLayout({
+export default async function HomeLayout({
   children,
   params,
 }: {
@@ -21,6 +23,11 @@ export default async function LocaleLayout({
 
   if (!routing.locales.includes(locale as "en" | "ar")) {
     notFound();
+  }
+
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session) {
+    redirect(`/${locale}/login`);
   }
 
   const messages = await getMessages();
