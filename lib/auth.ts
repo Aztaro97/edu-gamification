@@ -4,15 +4,31 @@ import { Pool } from "pg";
 
 const isProduction = process.env.NODE_ENV === "production";
 
-const trustedOrigins: string[] = [];
-if (process.env.BETTER_AUTH_URL) {
-  trustedOrigins.push(process.env.BETTER_AUTH_URL);
+function getBaseURL(): string {
+  const explicitURL = process.env.BETTER_AUTH_URL;
+  const onVercel = !!process.env.VERCEL;
+
+  // On Vercel, skip a localhost BETTER_AUTH_URL (dev leftover) and auto-detect
+  if (explicitURL && (!onVercel || !explicitURL.includes("localhost"))) {
+    return explicitURL;
+  }
+  if (process.env.VERCEL_ENV === "production" && process.env.VERCEL_PROJECT_PRODUCTION_URL) {
+    return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
+  }
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  return "http://localhost:3000";
 }
-if (process.env.VERCEL_URL) {
-  trustedOrigins.push(`https://${process.env.VERCEL_URL}`);
-}
-if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
-  trustedOrigins.push(`https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`);
+
+const baseURL = getBaseURL();
+
+function buildTrustedOrigins(): string[] {
+  const origins = new Set<string>([baseURL]);
+  if (process.env.BETTER_AUTH_URL) origins.add(process.env.BETTER_AUTH_URL);
+  if (process.env.VERCEL_URL) origins.add(`https://${process.env.VERCEL_URL}`);
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
+    origins.add(`https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`);
+  }
+  return Array.from(origins);
 }
 
 export const auth = betterAuth({
@@ -23,8 +39,8 @@ export const auth = betterAuth({
     idleTimeoutMillis: 30_000,
     connectionTimeoutMillis: 5_000,
   }),
-  baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
-  trustedOrigins,
+  baseURL,
+  trustedOrigins: buildTrustedOrigins(),
   emailAndPassword: { enabled: true },
   plugins: [nextCookies()],
   advanced: {
