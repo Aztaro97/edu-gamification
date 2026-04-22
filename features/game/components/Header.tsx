@@ -1,10 +1,10 @@
 "use client";
 
-import { useLocale, useTranslations } from "next-intl";
-import { usePathname, useRouter, Link } from "@/i18n/navigation";
-import { MashrabiyaBand } from "./MashrabiyaBand";
-import { useGame } from "../GameContext";
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { authClient } from "@/lib/auth-client";
+import { useLocale, useTranslations } from "next-intl";
+import { useGame } from "../GameContext";
+import { MashrabiyaBand } from "./MashrabiyaBand";
 
 type HeaderIconName = "book" | "map" | "trophy" | "user" | "sun";
 
@@ -29,6 +29,7 @@ export function Header() {
     <header className="relative">
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 py-4">
         <div className="flex items-start sm:items-center gap-3">
+         <Link href="/" >
           <div className="relative shrink-0 w-[44px] h-[44px] sm:w-[52px] sm:h-[52px]">
             <svg
               width="100%"
@@ -69,6 +70,7 @@ export function Header() {
               </g>
             </svg>
           </div>
+         </Link>
           <div className="min-w-0">
             <div className="font-display text-[8px] sm:text-[10px] tracking-[0.2em] sm:tracking-[0.3em] uppercase text-[#C8A951] truncate">
               {t("ministry")}

@@ -1,28 +1,34 @@
 import type { Metadata } from "next";
-import { Cinzel, Geist, Geist_Mono, Tajawal } from "next/font/google";
+import { Inter, Roboto, Roboto_Mono, Noto_Kufi_Arabic } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+// UAE Design System — English body font (Inter)
+const inter = Inter({
+  variable: "--font-sans",
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-const cinzel = Cinzel({
-  variable: "--font-display",
-  subsets: ["latin"],
-  weight: ["400", "600", "700"],
+  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
 
-const tajawal = Tajawal({
+// UAE Design System — English display/heading font (Roboto)
+const roboto = Roboto({
+  variable: "--font-display",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "700", "800"],
+  display: "swap",
+});
+
+const robotoMono = Roboto_Mono({
+  variable: "--font-mono",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+// UAE Design System — Arabic primary font (Noto Kufi Arabic)
+const notoKufiArabic = Noto_Kufi_Arabic({
   variable: "--font-arabic",
   subsets: ["arabic"],
-  weight: ["400", "500", "700"],
+  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -37,7 +43,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
-      className={`${geistSans.variable} ${geistMono.variable} ${cinzel.variable} ${tajawal.variable} h-full antialiased`}
+      className={`${inter.variable} ${robotoMono.variable} ${roboto.variable} ${notoKufiArabic.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">{children}</body>

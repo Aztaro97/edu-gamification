@@ -20,7 +20,8 @@
   "home": {
     "chapter": "الفصل الثاني",
     "chapterTitle": "جسم الإنسان",
-    "progress": "التقدم"
+    "progress": "التقدم",
+	"completed":"اكتمل"
   },
   "daily": {
     "kicker": "تحدي اليوم",

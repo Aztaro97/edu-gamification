@@ -1,17 +1,17 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useRouter } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { DailyChallenge } from "./components/DailyChallenge";
 import { JourneyRibbon } from "./components/JourneyRibbon";
 import { Leaderboard } from "./components/Leaderboard";
 import { LessonCard } from "./components/LessonCard";
 import { PathMap } from "./components/PathMap";
 import { PlayerPanel } from "./components/PlayerPanel";
-import { LESSONS, PLAYER } from "./data";
-import type { Lesson } from "./types";
+import { LESSONS } from "./data";
 import { useGame } from "./GameContext";
-import { useRouter } from "@/i18n/navigation";
+import type { Lesson } from "./types";
 
 const DEFAULT_ACTIVE_ID = 3;
 
@@ -80,7 +80,7 @@ export function GameApp() {
                 style={{ border: "1px solid rgba(200,169,81,0.4)" }}
               >
                 <div className="text-[10px] tracking-[0.25em] uppercase text-[#C8A951]">
-                  {t("progress")}
+                  {t("completed")}
                 </div>
                 <div className="font-display font-bold text-white text-lg tabular-nums" dir="ltr">
                   {completedCount} / {LESSONS.length}

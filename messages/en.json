@@ -20,7 +20,8 @@
   "home": {
     "chapter": "Chapter 2",
     "chapterTitle": "The Human Body",
-    "progress": "Progress"
+    "progress": "Progress",
+    "completed": "Completed"
   },
   "daily": {
     "kicker": "Daily Challenge",

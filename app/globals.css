@@ -25,51 +25,88 @@
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
+
+  /* UAE Design System — AEGold brand palette */
+  --color-ae-gold: #CBA344;
+  --color-ae-gold-light: #E6D7A2;
+  --color-ae-gold-dark: #7C5E24;
+  /* UAE Design System — AEBlack neutral palette */
+  --color-ae-black: #1B1D21;
+  --color-ae-black-soft: #4B4F58;
+  --color-ae-black-border: #E1E3E5;
+  /* UAE Design System — AERed semantic */
+  --color-ae-red: #D83731;
+  /* UAE Design System — AEGreen semantic */
+  --color-ae-green: #3F8E50;
 }
 
+/* ─── Light mode — UAE Design System palette ─────────────────────────────── */
 :root {
-  --background: 0 0% 100%;
-  --foreground: 0 0% 3.9%;
-  --card: 0 0% 100%;
-  --card-foreground: 0 0% 3.9%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 0 0% 3.9%;
-  --primary: 0 0% 9%;
+  /* AEBlack-900 (#1B1D21) → hsl(219, 10%, 12%) */
+  --foreground:    219 10% 12%;
+  /* AEBlack-50 (#E1E3E5) → hsl(210, 6%, 88%) */
+  --border:        210 6% 88%;
+  --input:         210 6% 88%;
+  /* AEBlack-900 → ring */
+  --ring:          219 10% 20%;
+
+  --background:         0 0% 100%;
+  --card:               0 0% 100%;
+  --card-foreground:    219 10% 12%;
+  --popover:            0 0% 100%;
+  --popover-foreground: 219 10% 12%;
+
+  /* Primary: AEBlack deep — authority & trust */
+  --primary:            219 10% 12%;
   --primary-foreground: 0 0% 98%;
-  --secondary: 0 0% 96.1%;
-  --secondary-foreground: 0 0% 9%;
-  --muted: 0 0% 96.1%;
-  --muted-foreground: 0 0% 45.1%;
-  --accent: 0 0% 96.1%;
-  --accent-foreground: 0 0% 9%;
-  --destructive: 0 84.2% 60.2%;
+
+  /* Secondary: light slate */
+  --secondary:            210 40% 96%;
+  --secondary-foreground: 219 10% 12%;
+
+  /* Muted: AEBlack-100 */
+  --muted:            210 6% 96%;
+  --muted-foreground: 215 16% 47%;
+
+  /* Accent: AEGold (#CBA344) → hsl(42, 56%, 53%) */
+  --accent:            42 56% 53%;
+  --accent-foreground: 219 10% 12%;
+
+  /* Destructive: AERed (#D83731) → hsl(2, 68%, 52%) */
+  --destructive:            2 68% 52%;
   --destructive-foreground: 0 0% 98%;
-  --border: 0 0% 89.8%;
-  --input: 0 0% 89.8%;
-  --ring: 0 0% 3.9%;
+
   --radius: 0.5rem;
 }
 
+/* ─── Dark mode — inverted UAE palette ───────────────────────────────────── */
 .dark {
-  --background: 0 0% 3.9%;
-  --foreground: 0 0% 98%;
-  --card: 0 0% 3.9%;
-  --card-foreground: 0 0% 98%;
-  --popover: 0 0% 3.9%;
-  --popover-foreground: 0 0% 98%;
-  --primary: 0 0% 98%;
-  --primary-foreground: 0 0% 9%;
-  --secondary: 0 0% 14.9%;
-  --secondary-foreground: 0 0% 98%;
-  --muted: 0 0% 14.9%;
-  --muted-foreground: 0 0% 63.9%;
-  --accent: 0 0% 14.9%;
-  --accent-foreground: 0 0% 98%;
-  --destructive: 0 62.8% 30.6%;
+  --background:         219 10% 8%;
+  --foreground:         0 0% 96%;
+  --card:               219 10% 11%;
+  --card-foreground:    0 0% 96%;
+  --popover:            219 10% 11%;
+  --popover-foreground: 0 0% 96%;
+
+  --primary:            0 0% 96%;
+  --primary-foreground: 219 10% 12%;
+
+  --secondary:            219 10% 18%;
+  --secondary-foreground: 0 0% 96%;
+
+  --muted:            219 10% 18%;
+  --muted-foreground: 215 16% 60%;
+
+  /* AEGold stays warm in dark mode */
+  --accent:            42 56% 48%;
+  --accent-foreground: 0 0% 96%;
+
+  --destructive:            2 60% 42%;
   --destructive-foreground: 0 0% 98%;
-  --border: 0 0% 14.9%;
-  --input: 0 0% 14.9%;
-  --ring: 0 0% 83.1%;
+
+  --border: 219 10% 22%;
+  --input:  219 10% 22%;
+  --ring:   42 56% 48%;
 }
 
 @layer base {
@@ -79,15 +116,19 @@
   body {
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
+    /* UAE Design System — Inter as default body font */
+    font-family: var(--font-sans), "Inter", system-ui, sans-serif;
   }
 }
 
+/* UAE Design System — Roboto for English display/headings */
 @utility font-display {
-  font-family: var(--font-display), "Cinzel", serif;
+  font-family: var(--font-display), "Roboto", sans-serif;
 }
 
+/* UAE Design System — Noto Kufi Arabic for all Arabic text */
 @utility font-arabic {
-  font-family: var(--font-arabic), "Tajawal", system-ui, sans-serif;
+  font-family: var(--font-arabic), "Noto Kufi Arabic", system-ui, sans-serif;
 }
 
 @keyframes game-shimmer {
