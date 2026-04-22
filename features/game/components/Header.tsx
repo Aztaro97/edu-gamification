@@ -3,11 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { MashrabiyaBand } from "./MashrabiyaBand";
+import { useGame } from "../GameContext";
 
-type HeaderIconName = "book" | "map" | "trophy" | "user";
+type HeaderIconName = "book" | "map" | "trophy" | "user" | "sun";
 
 export function Header() {
   const pathname = usePathname();
+  const { xp } = useGame();
 
   return (
     <header className="relative">
@@ -65,9 +67,25 @@ export function Header() {
           </div>
         </div>
         <nav aria-label="Primary" className="flex items-center gap-2 flex-wrap">
-          <HeaderPill href="/" icon="map" label="Map" labelAr="الخريطة" active={pathname === "/"} />
-          <HeaderPill href="/rewards" icon="trophy" label="Rewards" labelAr="الجوائز" active={pathname === "/rewards"} />
+          <HeaderPill href="/" icon="map" label="Journey" labelAr="الرحلة" active={pathname === "/"} />
           <HeaderPill href="/profile" icon="user" label="Profile" labelAr="الملف" active={pathname === "/profile"} />
+          <HeaderPill href="/rewards" icon="trophy" label="Rewards" labelAr="الجوائز" active={pathname === "/rewards"} />
+          <HeaderPill href="/daily" icon="sun" label="Daily" labelAr="اليومي" active={pathname === "/daily"} />
+          <div
+            className="ml-2 flex items-center gap-2 px-3 py-1.5 rounded-full"
+            style={{
+              background: "linear-gradient(90deg, rgba(244,217,122,0.18), rgba(239,51,64,0.12))",
+              border: "1px solid rgba(244,217,122,0.5)",
+            }}
+          >
+            <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden focusable="false">
+              <polygon points="7,1 9,5 13,5 10,8 11,13 7,10 3,13 4,8 1,5 5,5" fill="#F4D97A" />
+            </svg>
+            <span className="font-display text-[#F4D97A] font-bold tabular-nums text-xs">
+              {xp.toLocaleString()}
+            </span>
+            <span className="text-[9px] text-[#F5EED6]/70 uppercase tracking-wider">XP</span>
+          </div>
         </nav>
       </div>
       <MashrabiyaBand opacity={0.5} />
@@ -138,6 +156,14 @@ function HeaderIcon({ name }: { name: HeaderIconName }) {
     return (
       <svg {...p}>
         <path d="M1 3 L5 2 L9 4 L13 3 V11 L9 12 L5 10 L1 11 Z M5 2 V10 M9 4 V12" />
+      </svg>
+    );
+  }
+  if (name === "sun") {
+    return (
+      <svg {...p}>
+        <circle cx="7" cy="7" r="2.5" />
+        <path d="M7 1 V2 M7 12 V13 M1 7 H2 M12 7 H13 M2.5 2.5 L3.5 3.5 M10.5 10.5 L11.5 11.5 M2.5 11.5 L3.5 10.5 M10.5 3.5 L11.5 2.5" />
       </svg>
     );
   }

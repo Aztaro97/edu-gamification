@@ -64,8 +64,8 @@ export function GameApp() {
               boxShadow: "0 30px 80px -40px rgba(0,0,0,0.8)",
             }}
           >
-            <div className="absolute top-0 inset-x-0 z-10 flex items-center justify-between px-5 pt-4 pointer-events-none">
-              <div>
+            <div className="absolute top-0 inset-x-0 z-10 flex items-start justify-between px-5 pt-4 pointer-events-none">
+              <div className="max-w-[55%]">
                 <div className="font-display text-[10px] tracking-[0.3em] text-[#F4D97A] uppercase">
                   Chapter 2 · الفصل الثاني
                 </div>
@@ -79,7 +79,10 @@ export function GameApp() {
                   جسم الإنسان
                 </div>
               </div>
-              <div className="text-right">
+              <div
+                className="text-right bg-[#0A1628]/70 rounded-lg px-3 py-1.5 pointer-events-auto"
+                style={{ border: "1px solid rgba(200,169,81,0.4)" }}
+              >
                 <div className="text-[10px] tracking-[0.25em] uppercase text-[#C8A951]">
                   Progress
                 </div>

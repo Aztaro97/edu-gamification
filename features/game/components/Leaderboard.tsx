@@ -28,7 +28,7 @@ export function Leaderboard() {
       </div>
       <MashrabiyaBand className="px-5" opacity={0.4} />
       <ol className="px-4 pb-4 pt-3 space-y-2">
-        {LEADERBOARD.map((entry) => (
+        {LEADERBOARD.slice(0, 3).map((entry) => (
           <LeaderRow key={entry.rank} entry={entry} />
         ))}
       </ol>

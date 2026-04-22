@@ -2,6 +2,7 @@
 
 import { BADGES, PLAYER } from "../data";
 import { ArchFrame } from "./ArchFrame";
+import { GlassPanel } from "./Atoms";
 import { Avatar } from "./Avatar";
 import { BadgeMark } from "./Badge";
 import { LevelMedal } from "./LevelMedal";
@@ -20,25 +21,11 @@ export function PlayerPanel({ xpPct: externalXpPct }: PlayerPanelProps) {
   const earnedBadges = badges.map(id => BADGES.find(b => b.id === id)).filter(Boolean) as typeof BADGES;
 
   return (
-    <section
-      aria-label="Player profile"
-      className="relative rounded-2xl overflow-hidden"
-      style={{
-        background: "linear-gradient(180deg, #12213F 0%, #0A1628 100%)",
-        border: "1px solid rgba(200,169,81,0.35)",
-      }}
-    >
-      <svg
-        className="absolute inset-0 w-full h-full"
-        aria-hidden
-        focusable="false"
-      >
-        <rect width="100%" height="100%" fill="url(#lattice)" />
-      </svg>
-      <div className="relative px-5 pt-5 pb-4">
+    <GlassPanel aria-label="Player profile">
+      <div className="px-5 pt-5 pb-4">
         <ArchFrame>
           <div className="flex items-center gap-4">
-            <Avatar initials={PLAYER.initials} tone="red" size={64} />
+            <Avatar initials={PLAYER.initials} tone="red" size={56} />
             <div className="min-w-0">
               <div className="font-display text-[11px] tracking-[0.25em] text-[#C8A951] uppercase">
                 Player · اللاعب
@@ -141,6 +128,6 @@ export function PlayerPanel({ xpPct: externalXpPct }: PlayerPanelProps) {
           </div>
         </div>
       </div>
-    </section>
+    </GlassPanel>
   );
 }
