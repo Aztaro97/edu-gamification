@@ -5,12 +5,12 @@ type HeaderIconName = "book" | "map" | "trophy";
 export function Header() {
   return (
     <header className="relative">
-      <div className="flex items-center justify-between gap-4 py-4 flex-wrap">
-        <div className="flex items-center gap-3">
-          <div className="relative" style={{ width: 52, height: 52 }}>
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 py-4">
+        <div className="flex items-start sm:items-center gap-3">
+          <div className="relative shrink-0 w-[44px] h-[44px] sm:w-[52px] sm:h-[52px]">
             <svg
-              width="52"
-              height="52"
+              width="100%"
+              height="100%"
               viewBox="0 0 52 52"
               aria-hidden
               focusable="false"
@@ -41,24 +41,24 @@ export function Header() {
               </g>
             </svg>
           </div>
-          <div>
-            <div className="font-display text-[10px] tracking-[0.3em] uppercase text-[#C8A951]">
+          <div className="min-w-0">
+            <div className="font-display text-[8px] sm:text-[10px] tracking-[0.2em] sm:tracking-[0.3em] uppercase text-[#C8A951] truncate">
               Ministry of Education · UAE
             </div>
-            <div className="flex items-baseline gap-3">
-              <h1 className="font-display text-xl font-bold text-white">
+            <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mt-1 sm:mt-0">
+              <h1 className="font-display text-lg sm:text-xl font-bold text-white">
                 Rihlat Al Ma&apos;rifah
               </h1>
-              <span className="font-arabic text-xl text-[#F4D97A]" dir="rtl">
+              <span className="font-arabic text-lg sm:text-xl text-[#F4D97A]" dir="rtl">
                 رحلة المعرفة
               </span>
             </div>
-            <div className="text-[11px] text-[#F5EED6]/60">
+            <div className="text-[10px] sm:text-[11px] text-[#F5EED6]/60 truncate mt-0.5 sm:mt-0">
               Journey of Knowledge · Grade 4 · The Human Body
             </div>
           </div>
         </div>
-        <nav aria-label="Primary" className="flex items-center gap-2">
+        <nav aria-label="Primary" className="flex items-center gap-2 flex-wrap">
           <HeaderPill icon="book" label="Curriculum" labelAr="المنهج" />
           <HeaderPill icon="map" label="Map" labelAr="الخريطة" active />
           <HeaderPill icon="trophy" label="Rewards" labelAr="الجوائز" />
@@ -81,7 +81,7 @@ function HeaderPill({ icon, label, labelAr, active = false }: HeaderPillProps) {
     <button
       type="button"
       aria-pressed={active}
-      className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs cursor-pointer transition-colors duration-200 hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F4D97A]/60"
+      className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs cursor-pointer transition-colors duration-200 hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F4D97A]/60 whitespace-nowrap"
       style={{
         background: active ? "rgba(244,217,122,0.12)" : "transparent",
         border: `1px solid ${
