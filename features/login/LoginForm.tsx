@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
-import { useTranslations } from "next-intl";
-import { useRouter } from "@/i18n/navigation";
-import { authClient } from "@/lib/auth-client";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useRouter } from "@/i18n/navigation";
+import { authClient } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
+import { useState } from "react";
 
 interface LoginFormProps {
   locale: string;
@@ -19,6 +19,7 @@ export function LoginForm({ locale }: LoginFormProps) {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -48,8 +49,6 @@ export function LoginForm({ locale }: LoginFormProps) {
       style={{
         background: "rgba(10, 22, 40, 0.85)",
         border: "1px solid rgba(200, 169, 81, 0.3)",
-        boxShadow:
-          "0 0 40px rgba(200,169,81,0.08), inset 0 1px 0 rgba(200,169,81,0.1)",
       }}
     >
       {/* Logo */}
@@ -150,17 +149,38 @@ export function LoginForm({ locale }: LoginFormProps) {
           >
             {t("passwordLabel")}
           </Label>
-          <Input
-            id="password"
-            type="password"
-            autoComplete="current-password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder={t("passwordPlaceholder")}
-            disabled={loading}
-            className="bg-[#0A1628] border-[rgba(200,169,81,0.3)] text-[#F5EED6] placeholder:text-[#F5EED6]/30 focus-visible:ring-[#C8A951]/50 focus-visible:border-[#C8A951]/60 h-11"
-          />
+          <div className="relative">
+            <Input
+              id="password"
+              type={showPassword ? "text" : "password"}
+              autoComplete="current-password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder={t("passwordPlaceholder")}
+              disabled={loading}
+              className="bg-[#0A1628] border-[rgba(200,169,81,0.3)] text-[#F5EED6] placeholder:text-[#F5EED6]/30 focus-visible:ring-[#C8A951]/50 focus-visible:border-[#C8A951]/60 h-11 pr-10"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((v) => !v)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#F5EED6]/50 hover:text-[#F5EED6]/80 transition-colors focus-visible:outline-none"
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? (
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                  <path d="M1 8C1 8 3.5 3 8 3s7 5 7 5-2.5 5-7 5S1 8 1 8Z" />
+                  <circle cx="8" cy="8" r="2" />
+                  <path d="M2 2l12 12" />
+                </svg>
+              ) : (
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                  <path d="M1 8C1 8 3.5 3 8 3s7 5 7 5-2.5 5-7 5S1 8 1 8Z" />
+                  <circle cx="8" cy="8" r="2" />
+                </svg>
+              )}
+            </button>
+          </div>
         </div>
 
         {error && (

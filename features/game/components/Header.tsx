@@ -4,6 +4,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter, Link } from "@/i18n/navigation";
 import { MashrabiyaBand } from "./MashrabiyaBand";
 import { useGame } from "../GameContext";
+import { authClient } from "@/lib/auth-client";
 
 type HeaderIconName = "book" | "map" | "trophy" | "user" | "sun";
 
@@ -17,6 +18,11 @@ export function Header() {
   function switchLocale() {
     const next = locale === "en" ? "ar" : "en";
     router.replace(pathname, { locale: next });
+  }
+
+  async function handleSignOut() {
+    await authClient.signOut();
+    router.push("/login");
   }
 
   return (
@@ -177,6 +183,26 @@ export function Header() {
               className={locale === "ar" ? "font-sans" : "font-arabic"}
             >
               {t("langToggle")}
+            </span>
+          </button>
+
+          {/* Logout */}
+          <button
+            onClick={handleSignOut}
+            aria-label="Sign out"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs cursor-pointer transition-all duration-200 hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400/60"
+            style={{
+              background: "rgba(255,94,107,0.08)",
+              border: "1px solid rgba(255,94,107,0.3)",
+              color: "#FF5E6B",
+            }}
+          >
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+              <path d="M4.5 6H11M8.5 3.5L11 6l-2.5 2.5" />
+              <path d="M7 1.5H2A.5.5 0 0 0 1.5 2v8a.5.5 0 0 0 .5.5h5" />
+            </svg>
+            <span className={locale === "ar" ? "font-arabic tracking-normal" : "font-display tracking-wider uppercase"}>
+              {t("signOut")}
             </span>
           </button>
         </nav>
