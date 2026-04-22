@@ -2,12 +2,34 @@ import { betterAuth } from "better-auth";
 import { nextCookies } from "better-auth/next-js";
 import { Pool } from "pg";
 
+const isProduction = process.env.NODE_ENV === "production";
+
+const trustedOrigins: string[] = [];
+if (process.env.BETTER_AUTH_URL) {
+  trustedOrigins.push(process.env.BETTER_AUTH_URL);
+}
+if (process.env.VERCEL_URL) {
+  trustedOrigins.push(`https://${process.env.VERCEL_URL}`);
+}
+if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
+  trustedOrigins.push(`https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`);
+}
+
 export const auth = betterAuth({
   secret: process.env.BETTER_AUTH_SECRET,
-  database: new Pool({ connectionString: process.env.POSTGRES_URL! }),
+  database: new Pool({
+    connectionString: process.env.POSTGRES_URL!,
+    max: isProduction ? 3 : 10,
+    idleTimeoutMillis: 30_000,
+    connectionTimeoutMillis: 5_000,
+  }),
   baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
+  trustedOrigins,
   emailAndPassword: { enabled: true },
   plugins: [nextCookies()],
+  advanced: {
+    useSecureCookies: isProduction,
+  },
   user: {
     fields: {
       emailVerified: "email_verified",
