@@ -120,6 +120,18 @@
     "unlocked": "ابدأ التحدي",
     "locked": "مقفل"
   },
+  "auth": {
+    "ministry": "وزارة التعليم · الإمارات",
+    "title": "رحلة المعرفة",
+    "subtitle": "سجّل دخولك لمتابعة رحلتك",
+    "emailLabel": "البريد الإلكتروني",
+    "emailPlaceholder": "بريدك@مثال.com",
+    "passwordLabel": "كلمة المرور",
+    "passwordPlaceholder": "••••••••",
+    "signIn": "تسجيل الدخول",
+    "signingIn": "جارٍ الدخول…",
+    "invalidCredentials": "البريد أو كلمة المرور غير صحيحة. حاول مرة أخرى."
+  },
   "results": {
     "lessonComplete": "اكتملت الدرس",
     "congrats": "مبروك، أحمد!",
