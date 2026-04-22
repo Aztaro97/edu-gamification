@@ -43,9 +43,9 @@ export const auth = betterAuth({
   trustedOrigins: buildTrustedOrigins(),
   emailAndPassword: { enabled: true },
   plugins: [nextCookies()],
-  advanced: {
-    useSecureCookies: isProduction,
-  },
+//   advanced: {
+//     useSecureCookies: isProduction,
+//   },
   user: {
     fields: {
       emailVerified: "email_verified",
