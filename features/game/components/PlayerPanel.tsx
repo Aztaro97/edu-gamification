@@ -1,16 +1,23 @@
-import { PLAYER } from "../data";
+"use client";
+
+import { BADGES, PLAYER } from "../data";
 import { ArchFrame } from "./ArchFrame";
 import { Avatar } from "./Avatar";
 import { BadgeMark } from "./Badge";
 import { LevelMedal } from "./LevelMedal";
 import { StreakFlame } from "./StreakFlame";
+import { useGame } from "../GameContext";
 
 interface PlayerPanelProps {
-  xpPct: number;
+  xpPct?: number; // Kept for compatibility, though we calculate it
 }
 
-export function PlayerPanel({ xpPct }: PlayerPanelProps) {
-  const remaining = PLAYER.xpForNext - PLAYER.xp;
+export function PlayerPanel({ xpPct: externalXpPct }: PlayerPanelProps) {
+  const { xp, nextThreshold, level, streak, badges } = useGame();
+  
+  const remaining = nextThreshold - xp;
+  const xpPct = externalXpPct !== undefined ? externalXpPct : (xp / nextThreshold) * 100;
+  const earnedBadges = badges.map(id => BADGES.find(b => b.id === id)).filter(Boolean) as typeof BADGES;
 
   return (
     <section
@@ -54,10 +61,10 @@ export function PlayerPanel({ xpPct }: PlayerPanelProps) {
 
         <div className="mt-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <LevelMedal level={PLAYER.level} />
+            <LevelMedal level={level} />
             <div>
               <div className="text-[10px] tracking-[0.2em] uppercase text-[#C8A951]">
-                Level {PLAYER.level}
+                Level {level}
               </div>
               <div className="text-sm text-white font-semibold">
                 {PLAYER.title}
@@ -70,7 +77,7 @@ export function PlayerPanel({ xpPct }: PlayerPanelProps) {
               </div>
             </div>
           </div>
-          <StreakFlame count={PLAYER.streak} />
+          <StreakFlame count={streak} />
         </div>
 
         <div className="mt-4">
@@ -79,8 +86,8 @@ export function PlayerPanel({ xpPct }: PlayerPanelProps) {
               XP · خبرة
             </span>
             <span className="text-[#F5EED6]/80 tabular-nums">
-              {PLAYER.xp.toLocaleString()} /{" "}
-              {PLAYER.xpForNext.toLocaleString()}
+              {xp.toLocaleString()} /{" "}
+              {nextThreshold.toLocaleString()}
             </span>
           </div>
           <div
@@ -88,8 +95,8 @@ export function PlayerPanel({ xpPct }: PlayerPanelProps) {
             role="progressbar"
             aria-label="Experience progress"
             aria-valuemin={0}
-            aria-valuemax={PLAYER.xpForNext}
-            aria-valuenow={PLAYER.xp}
+            aria-valuemax={nextThreshold}
+            aria-valuenow={xp}
             style={{
               background: "#0A1628",
               border: "1px solid rgba(200,169,81,0.4)",
@@ -114,7 +121,7 @@ export function PlayerPanel({ xpPct }: PlayerPanelProps) {
             ))}
           </div>
           <div className="mt-1 text-[10px] text-[#F5EED6]/50">
-            {remaining.toLocaleString()} XP to Level {PLAYER.level + 1}
+            {remaining.toLocaleString()} XP to Level {level + 1}
           </div>
         </div>
 
@@ -124,11 +131,11 @@ export function PlayerPanel({ xpPct }: PlayerPanelProps) {
               Badges · الأوسمة
             </div>
             <div className="text-[10px] text-[#F5EED6]/50">
-              {PLAYER.badges.length} earned
+              {earnedBadges.length} earned
             </div>
           </div>
           <div className="grid grid-cols-4 gap-2">
-            {PLAYER.badges.map((b) => (
+            {earnedBadges.slice(0, 4).map((b) => (
               <BadgeMark key={b.id} badge={b} />
             ))}
           </div>

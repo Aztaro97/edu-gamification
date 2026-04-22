@@ -1,4 +1,4 @@
-import type { Badge, BadgeTier } from "../types";
+import type { Badge, BadgeMark, BadgeTier } from "../types";
 
 const TIER_COLORS: Record<BadgeTier, string> = {
   gold: "#C8A951",
@@ -6,17 +6,28 @@ const TIER_COLORS: Record<BadgeTier, string> = {
   green: "#009A44",
 };
 
-interface BadgeProps {
+interface BadgeMarkProps {
   badge: Badge;
+  size?: number;
+  muted?: boolean;
+  showLabel?: boolean;
 }
 
-export function BadgeMark({ badge }: BadgeProps) {
-  const color = TIER_COLORS[badge.tier];
+export function BadgeMark({
+  badge,
+  size = 56,
+  muted = false,
+  showLabel = true,
+}: BadgeMarkProps) {
+  const tierColor = TIER_COLORS[badge.tier];
+  const color = muted ? "#6B7A99" : tierColor;
+  const height = Math.round((size * 64) / 56);
+
   return (
     <div className="relative flex flex-col items-center group">
       <svg
-        width="56"
-        height="64"
+        width={size}
+        height={height}
         viewBox="0 0 56 64"
         aria-hidden
         focusable="false"
@@ -26,24 +37,40 @@ export function BadgeMark({ badge }: BadgeProps) {
           fill="#0A1628"
           stroke={color}
           strokeWidth="1.5"
+          opacity={muted ? 0.6 : 1}
         />
         <polygon
           points="28,6 39,10 48,19 48,33 39,43 28,52 17,43 8,33 8,19 17,10"
           fill="url(#lattice)"
-          opacity="0.5"
+          opacity={muted ? 0.2 : 0.5}
         />
-        <g transform="translate(28 28)">
-          {badge.id === "falcon" && <FalconMark color={color} />}
-          {badge.id === "dune" && <DuneMark color={color} />}
-          {badge.id === "star" && <StarMark color={color} />}
-          {badge.id === "crescent" && <CrescentMark color={color} />}
+        <g transform="translate(28 28)" opacity={muted ? 0.5 : 1}>
+          <Glyph mark={badge.mark} color={color} />
         </g>
       </svg>
-      <div className="text-[9px] text-center text-[#F5EED6]/70 leading-tight mt-0.5 px-0.5 truncate w-full">
-        {badge.name}
-      </div>
+      {showLabel && (
+        <div className="text-[9px] text-center text-[#F5EED6]/70 leading-tight mt-0.5 px-0.5 truncate w-full">
+          {badge.name}
+        </div>
+      )}
     </div>
   );
+}
+
+interface GlyphProps {
+  mark: BadgeMark;
+  color: string;
+}
+
+function Glyph({ mark, color }: GlyphProps) {
+  if (mark === "falcon") return <FalconMark color={color} />;
+  if (mark === "dune") return <DuneMark color={color} />;
+  if (mark === "star") return <StarMark color={color} />;
+  if (mark === "crescent") return <CrescentMark color={color} />;
+  if (mark === "heart") return <HeartMark color={color} />;
+  if (mark === "lotus") return <LotusMark color={color} />;
+  if (mark === "shield") return <ShieldMark color={color} />;
+  return <BookMark color={color} />;
 }
 
 function FalconMark({ color }: { color: string }) {
@@ -87,6 +114,46 @@ function CrescentMark({ color }: { color: string }) {
     <g fill={color}>
       <path d="M-6 0 A 8 8 0 1 0 2 -8 A 6 6 0 1 1 -6 0 Z" />
       <polygon points="6,-2 7,1 10,1 8,3 9,6 6,4 3,6 4,3 2,1 5,1" />
+    </g>
+  );
+}
+
+function HeartMark({ color }: { color: string }) {
+  return (
+    <path
+      d="M0 8 C -10 0, -10 -8, -4 -8 C -1 -8, 0 -5, 0 -3 C 0 -5, 1 -8, 4 -8 C 10 -8, 10 0, 0 8 Z"
+      fill={color}
+      stroke={color}
+      strokeWidth="0.8"
+      strokeLinejoin="round"
+    />
+  );
+}
+
+function LotusMark({ color }: { color: string }) {
+  return (
+    <g fill="none" stroke={color} strokeWidth="1.4" strokeLinecap="round">
+      <path d="M0 -6 C -4 -3, -4 3, 0 6 C 4 3, 4 -3, 0 -6 Z" />
+      <path d="M-8 -2 C -6 2, -2 4, 0 6 C 2 4, 6 2, 8 -2" />
+      <path d="M-10 4 C -6 8, 6 8, 10 4" />
+    </g>
+  );
+}
+
+function ShieldMark({ color }: { color: string }) {
+  return (
+    <g fill="none" stroke={color} strokeWidth="1.4" strokeLinejoin="round">
+      <path d="M0 -10 L 8 -6 V 2 C 8 6, 4 8, 0 10 C -4 8, -8 6, -8 2 V -6 Z" />
+      <path d="M-3 -1 L 0 2 L 5 -4" strokeLinecap="round" />
+    </g>
+  );
+}
+
+function BookMark({ color }: { color: string }) {
+  return (
+    <g fill="none" stroke={color} strokeWidth="1.4" strokeLinecap="round">
+      <path d="M-8 -6 H -2 C 0 -6, 0 -4, 0 -4 V 8 C 0 6, -2 6, -2 6 H -8 Z" />
+      <path d="M8 -6 H 2 C 0 -6, 0 -4, 0 -4 V 8 C 0 6, 2 6, 2 6 H 8 Z" />
     </g>
   );
 }

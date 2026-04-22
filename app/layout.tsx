@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Cinzel, Geist, Geist_Mono, Tajawal } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { GameProvider } from "@/features/game";
+import { AppShell } from "@/features/game/components/AppShell";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -51,7 +53,11 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <GameProvider>
+            <AppShell>
+              {children}
+            </AppShell>
+          </GameProvider>
         </ThemeProvider>
       </body>
     </html>

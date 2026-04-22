@@ -9,6 +9,19 @@ export type LessonIconName =
   | "brain"
   | "shield";
 
+export type QuestionType = "mcq" | "tf";
+
+export interface Question {
+  type: QuestionType;
+  q: string;
+  qAr: string;
+  choices?: readonly string[];
+  choicesAr?: readonly string[];
+  correct: number;
+  explanation?: string;
+  explanationAr?: string;
+}
+
 export interface Lesson {
   id: number;
   title: string;
@@ -21,16 +34,39 @@ export interface Lesson {
   state: LessonState;
   starsEarned: number;
   icon: LessonIconName;
+  questions: readonly Question[];
 }
 
 export type BadgeTier = "gold" | "red" | "green";
-export type BadgeId = "falcon" | "dune" | "star" | "crescent";
+
+export type BadgeMark =
+  | "falcon"
+  | "dune"
+  | "star"
+  | "crescent"
+  | "heart"
+  | "lotus"
+  | "shield"
+  | "book";
+
+export type BadgeReq =
+  | "completedLessons"
+  | "totalStars"
+  | "perfectLessons"
+  | "streak"
+  | "dailyCompleted"
+  | "xp";
 
 export interface Badge {
-  id: BadgeId;
+  id: string;
   name: string;
   nameAr: string;
+  description: string;
+  descriptionAr: string;
   tier: BadgeTier;
+  mark: BadgeMark;
+  req: BadgeReq;
+  threshold: number;
 }
 
 export interface Player {
@@ -44,7 +80,7 @@ export interface Player {
   xpForNext: number;
   streak: number;
   initials: string;
-  badges: Badge[];
+  badges: readonly Badge[];
 }
 
 export interface LeaderEntry {
@@ -54,4 +90,18 @@ export interface LeaderEntry {
   xp: number;
   color: string;
   you?: boolean;
+}
+
+export interface StreakDay {
+  day: string;
+  dayAr: string;
+  active: boolean;
+  xp: number;
+}
+
+export interface LevelInfo {
+  level: number;
+  xpIntoLevel: number;
+  xpForLevel: number;
+  nextThreshold: number;
 }

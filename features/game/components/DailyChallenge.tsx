@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 interface Countdown {
   readonly h: number;
@@ -39,18 +40,19 @@ export function DailyChallenge() {
   const aria = `Daily challenge ends in ${time.h} hours ${time.m} minutes ${time.s} seconds`;
 
   return (
-    <section
-      aria-label="Daily challenge"
-      className="relative rounded-2xl overflow-hidden"
-      style={{
-        background:
-          "linear-gradient(110deg, #1B2A4A 0%, #0A1628 55%, #3B2514 100%)",
-        border: "1px solid rgba(244,217,122,0.45)",
-        boxShadow: "0 16px 40px -16px rgba(244,217,122,0.35)",
-      }}
-    >
-      <svg
-        className="absolute top-0 right-0 opacity-40"
+    <Link href="/daily" className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F4D97A]/60 rounded-2xl group transition-transform active:scale-[0.98]">
+      <section
+        aria-label="Daily challenge"
+        className="relative rounded-2xl overflow-hidden"
+        style={{
+          background:
+            "linear-gradient(110deg, #1B2A4A 0%, #0A1628 55%, #3B2514 100%)",
+          border: "1px solid rgba(244,217,122,0.45)",
+          boxShadow: "0 16px 40px -16px rgba(244,217,122,0.35)",
+        }}
+      >
+        <svg
+          className="absolute top-0 right-0 opacity-40 group-hover:opacity-60 transition-opacity"
         width="160"
         height="160"
         viewBox="0 0 160 160"
@@ -150,6 +152,7 @@ export function DailyChallenge() {
           </div>
         </div>
       </div>
-    </section>
+      </section>
+    </Link>
   );
 }

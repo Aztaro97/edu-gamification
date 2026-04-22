@@ -1,8 +1,14 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { MashrabiyaBand } from "./MashrabiyaBand";
 
-type HeaderIconName = "book" | "map" | "trophy";
+type HeaderIconName = "book" | "map" | "trophy" | "user";
 
 export function Header() {
+  const pathname = usePathname();
+
   return (
     <header className="relative">
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 py-4">
@@ -59,9 +65,9 @@ export function Header() {
           </div>
         </div>
         <nav aria-label="Primary" className="flex items-center gap-2 flex-wrap">
-          <HeaderPill icon="book" label="Curriculum" labelAr="المنهج" />
-          <HeaderPill icon="map" label="Map" labelAr="الخريطة" active />
-          <HeaderPill icon="trophy" label="Rewards" labelAr="الجوائز" />
+          <HeaderPill href="/" icon="map" label="Map" labelAr="الخريطة" active={pathname === "/"} />
+          <HeaderPill href="/rewards" icon="trophy" label="Rewards" labelAr="الجوائز" active={pathname === "/rewards"} />
+          <HeaderPill href="/profile" icon="user" label="Profile" labelAr="الملف" active={pathname === "/profile"} />
         </nav>
       </div>
       <MashrabiyaBand opacity={0.5} />
@@ -70,17 +76,18 @@ export function Header() {
 }
 
 interface HeaderPillProps {
+  href: string;
   icon: HeaderIconName;
   label: string;
   labelAr: string;
   active?: boolean;
 }
 
-function HeaderPill({ icon, label, labelAr, active = false }: HeaderPillProps) {
+function HeaderPill({ href, icon, label, labelAr, active = false }: HeaderPillProps) {
   return (
-    <button
-      type="button"
-      aria-pressed={active}
+    <Link
+      href={href}
+      aria-current={active ? "page" : undefined}
       className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs cursor-pointer transition-colors duration-200 hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F4D97A]/60 whitespace-nowrap"
       style={{
         background: active ? "rgba(244,217,122,0.12)" : "transparent",
@@ -95,7 +102,7 @@ function HeaderPill({ icon, label, labelAr, active = false }: HeaderPillProps) {
       <span className="font-arabic opacity-70" dir="rtl">
         {labelAr}
       </span>
-    </button>
+    </Link>
   );
 }
 
@@ -112,6 +119,14 @@ function HeaderIcon({ name }: { name: HeaderIconName }) {
     "aria-hidden": true,
     focusable: false as const,
   };
+  if (name === "user") {
+    return (
+      <svg {...p}>
+        <path d="M7 7 C 8.65685 7 10 5.65685 10 4 C 10 2.34315 8.65685 1 7 1 C 5.34315 1 4 2.34315 4 4 C 4 5.65685 5.34315 7 7 7 Z" />
+        <path d="M1 13 C 1 10.5 4 9 7 9 C 10 9 13 10.5 13 13" />
+      </svg>
+    );
+  }
   if (name === "book") {
     return (
       <svg {...p}>
