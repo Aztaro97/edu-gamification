@@ -1,6 +1,6 @@
 import createMiddleware from "next-intl/middleware";
-import { routing } from "./i18n/routing";
 import { type NextRequest, NextResponse } from "next/server";
+import { routing } from "./i18n/routing";
 
 const intlMiddleware = createMiddleware(routing);
 
@@ -11,7 +11,7 @@ function stripLocale(pathname: string): string {
   return pathname.replace(/^\/(en|ar)/, "") || "/";
 }
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (pathname.startsWith("/api/auth")) {
