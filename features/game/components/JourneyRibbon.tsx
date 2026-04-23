@@ -75,12 +75,6 @@ export function JourneyRibbon({ lessons, activeId, onSelect }: JourneyRibbonProp
             );
           })}
         </div>
-        <div className="shrink-0 text-right">
-          <div className="text-[10px] tracking-[0.25em] uppercase text-[#C8A951]">{t("progress")}</div>
-          <div className="font-display font-bold text-white tabular-nums text-lg">
-            {pct}<span className="text-[#C8A951] text-sm">%</span>
-          </div>
-        </div>
       </div>
     </div>
   );
