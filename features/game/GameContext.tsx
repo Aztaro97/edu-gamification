@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { BADGES, levelInfoFromXp, LESSONS, starsFromScore } from "./data";
+import { LESSONS, levelInfoFromXp, starsFromScore } from "./data";
 import type { LessonState } from "./types";
 
 interface GameState {
@@ -13,6 +13,7 @@ interface GameState {
   badges: string[]; // Badge IDs
   dailyCompleted: boolean;
   leaderboardRank: number;
+  tourSeen: boolean;
 }
 
 interface GameContextValue extends GameState {
@@ -24,6 +25,7 @@ interface GameContextValue extends GameState {
   completeLesson: (lessonId: number, correctCount: number, total: number) => { earnedXp: number; stars: number };
   completeDaily: (bonusXp?: number) => void;
   resetProgress: () => void;
+  markTourSeen: () => void;
 }
 
 const GameContext = createContext<GameContextValue | null>(null);
@@ -41,7 +43,11 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     if (typeof window !== "undefined") {
       try {
         const saved = JSON.parse(localStorage.getItem("rihlat_save") || "null");
-        if (saved && saved.xp != null) return saved;
+
+        if (saved) {
+          // Existing saves: skip tour by default (don't interrupt returning users)
+          return { ...saved, tourSeen: saved.tourSeen ?? true };
+        }
       } catch (e) {
         // Ignore error
       }
@@ -52,9 +58,10 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       lessonStars: { 1: 3, 2: 3, 3: 2 },
       activeLesson: 3,
       streak: 5,
-      badges: ["first-steps", "falcon-scholar", "seven-stars", "dune-runner"], // match initial BADGES in data.ts
+      badges: ["first-steps", "falcon-scholar", "seven-stars", "dune-runner"],
       dailyCompleted: false,
       leaderboardRank: 2,
+      tourSeen: false,
     };
   });
 
@@ -120,7 +127,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
   const resetProgress = () => {
     localStorage.removeItem("rihlat_save");
-    setState({
+    setState((s) => ({
       xp: 0,
       completedLessons: [],
       lessonStars: {},
@@ -129,7 +136,12 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       badges: [],
       dailyCompleted: false,
       leaderboardRank: 6,
-    });
+      tourSeen: s.tourSeen, // preserve — don't re-trigger tour on reset
+    }));
+  };
+
+  const markTourSeen = () => {
+    setState((s) => ({ ...s, tourSeen: true }));
   };
 
   const value: GameContextValue = {
@@ -142,6 +154,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     completeLesson,
     completeDaily,
     resetProgress,
+    markTourSeen,
   };
 
   if (!mounted) return null; // Avoid hydration mismatch

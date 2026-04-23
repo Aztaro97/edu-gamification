@@ -134,6 +134,40 @@
     "signingIn": "Signing in…",
     "invalidCredentials": "Invalid email or password. Please try again."
   },
+  "tour": {
+    "skip": "Skip Tour",
+    "next": "Next",
+    "back": "Back",
+    "finish": "Got it!",
+    "step0": {
+      "title": "Welcome, Explorer!",
+      "content": "Your Journey of Knowledge begins here. Let me show you around — it only takes a minute!"
+    },
+    "step1": {
+      "title": "Your Learning Path",
+      "content": "This ribbon shows every lesson in the chapter. Tap any lesson to jump to its details."
+    },
+    "step2": {
+      "title": "Your Progress",
+      "content": "Track your XP, current level, day streak, and badges you've earned. Keep learning to level up!"
+    },
+    "step3": {
+      "title": "The Journey Map",
+      "content": "Tap any lesson node to select it. Completed lessons glow gold — keep exploring!"
+    },
+    "step4": {
+      "title": "Daily Challenge",
+      "content": "Complete today's challenge to earn bonus XP and unlock exclusive badges. A new challenge drops every day!"
+    },
+    "step5": {
+      "title": "Lesson Details",
+      "content": "See the XP reward, difficulty, and estimated time, then tap Start to begin your challenge."
+    },
+    "step6": {
+      "title": "Leaderboard",
+      "content": "See how you rank among your classmates this week. Complete more lessons to climb higher!"
+    }
+  },
   "results": {
     "lessonComplete": "Lesson Complete",
     "congrats": "Mabrook, Ahmed!",

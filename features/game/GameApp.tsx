@@ -1,9 +1,10 @@
 "use client";
 
-import { AnimatePresence } from "framer-motion";
 import { useRouter } from "@/i18n/navigation";
+import { AnimatePresence } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { AppTour } from "./components/AppTour";
 import { DailyChallenge } from "./components/DailyChallenge";
 import { JourneyRibbon } from "./components/JourneyRibbon";
 import { Leaderboard } from "./components/Leaderboard";
@@ -17,7 +18,7 @@ import type { Lesson } from "./types";
 const DEFAULT_ACTIVE_ID = 3;
 
 export function GameApp() {
-  const { xp, nextThreshold, activeLesson: activeIdContext, getLessonState } = useGame();
+  const { xp, nextThreshold, activeLesson: activeIdContext, getLessonState, tourSeen, markTourSeen } = useGame();
   const router = useRouter();
   const t = useTranslations("home");
 
@@ -51,16 +52,25 @@ export function GameApp() {
 
   return (
     <>
-      <JourneyRibbon lessons={LESSONS} activeId={selectedId} onSelect={setSelectedId} />
+      <AppTour run={!tourSeen} onFinish={markTourSeen} />
+
+      <div id="tour-ribbon">
+        <JourneyRibbon lessons={LESSONS} activeId={selectedId} onSelect={setSelectedId} />
+      </div>
 
       <div className="grid grid-cols-12 gap-6 mt-6">
         <aside className="col-span-12 md:col-span-4 lg:col-span-3 space-y-5">
-          <PlayerPanel xpPct={xpPct} />
-          <Leaderboard />
+          <div id="tour-player">
+            <PlayerPanel xpPct={xpPct} />
+          </div>
+          <div id="tour-leaderboard">
+            <Leaderboard />
+          </div>
         </aside>
 
         <main className="col-span-12 md:col-span-8 lg:col-span-6">
           <div
+            id="tour-map"
             className="relative rounded-2xl overflow-hidden h-full min-h-[500px]"
             style={{
               border: "1px solid rgba(200,169,81,0.35)",
@@ -97,14 +107,18 @@ export function GameApp() {
         </main>
 
         <section className="col-span-12 lg:col-span-3 space-y-5">
-          <DailyChallenge />
-          <AnimatePresence mode="wait">
-            <LessonCard
-              key={selectedId}
-              lesson={activeLesson ? { ...activeLesson, state: getLessonState(activeLesson.id) } : undefined}
-              onStart={(lesson) => router.push(`/lesson/${lesson.id}`)}
-            />
-          </AnimatePresence>
+          <div id="tour-daily">
+            <DailyChallenge />
+          </div>
+          <div id="tour-lesson">
+            <AnimatePresence mode="wait">
+              <LessonCard
+                key={selectedId}
+                lesson={activeLesson ? { ...activeLesson, state: getLessonState(activeLesson.id) } : undefined}
+                onStart={(lesson) => router.push(`/lesson/${lesson.id}`)}
+              />
+            </AnimatePresence>
+          </div>
         </section>
       </div>
     </>
