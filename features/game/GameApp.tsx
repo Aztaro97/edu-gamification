@@ -1,5 +1,6 @@
 "use client";
 
+import { AnimatePresence } from "framer-motion";
 import { useRouter } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -97,10 +98,13 @@ export function GameApp() {
 
         <section className="col-span-12 lg:col-span-3 space-y-5">
           <DailyChallenge />
-          <LessonCard
-            lesson={activeLesson ? { ...activeLesson, state: getLessonState(activeLesson.id) } : undefined}
-            onStart={(lesson) => router.push(`/lesson/${lesson.id}`)}
-          />
+          <AnimatePresence mode="wait">
+            <LessonCard
+              key={selectedId}
+              lesson={activeLesson ? { ...activeLesson, state: getLessonState(activeLesson.id) } : undefined}
+              onStart={(lesson) => router.push(`/lesson/${lesson.id}`)}
+            />
+          </AnimatePresence>
         </section>
       </div>
     </>

@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import React from "react";
 import type { Lesson } from "../types";
@@ -13,7 +14,7 @@ interface JourneyRibbonProps {
 export function JourneyRibbon({ lessons, activeId, onSelect }: JourneyRibbonProps) {
   const t = useTranslations("journeyRibbon");
   const completed = lessons.filter(l => l.state === "completed").length;
-  const pct = (completed / lessons.length) * 100;
+  const pct = Math.round((completed / lessons.length) * 100);
 
   return (
     <div className="mt-4 relative rounded-xl overflow-hidden" style={{
@@ -35,9 +36,12 @@ export function JourneyRibbon({ lessons, activeId, onSelect }: JourneyRibbonProp
               l.state === "unlocked"  ? "#C8A951" : "#2B3A55";
             return (
               <React.Fragment key={l.id}>
-                <button
+                <motion.button
                   onClick={() => l.state !== "locked" && onSelect(l.id)}
-                  className="group relative flex items-center gap-2 px-2.5 py-1.5 rounded-md transition-all"
+                  className="group relative flex items-center gap-2 px-2.5 py-1.5 rounded-md"
+                  whileHover={l.state !== "locked" ? { scale: 1.04 } : {}}
+                  whileTap={l.state !== "locked" ? { scale: 0.96 } : {}}
+                  transition={{ duration: 0.15 }}
                   style={{
                     background: isActive ? `${color}22` : "transparent",
                     border: `1px solid ${isActive ? color : "transparent"}`,
@@ -51,7 +55,15 @@ export function JourneyRibbon({ lessons, activeId, onSelect }: JourneyRibbonProp
                     {l.state === "completed" ? "✓" : i + 1}
                   </div>
                   <span className="text-[11px] text-white/90 hidden lg:inline truncate max-w-[120px]">{l.title}</span>
-                </button>
+                  {isActive && (
+                    <motion.span
+                      layoutId="journey-active-pill"
+                      className="absolute inset-0 rounded-md pointer-events-none"
+                      style={{ border: `1px solid ${color}`, boxShadow: `0 0 8px ${color}55` }}
+                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                    />
+                  )}
+                </motion.button>
                 {i < lessons.length - 1 && (
                   <div className="flex-1 h-px" style={{
                     background: i < completed - 1
@@ -63,12 +75,12 @@ export function JourneyRibbon({ lessons, activeId, onSelect }: JourneyRibbonProp
             );
           })}
         </div>
-        {/* <div className="shrink-0 text-right">
+        <div className="shrink-0 text-right">
           <div className="text-[10px] tracking-[0.25em] uppercase text-[#C8A951]">{t("progress")}</div>
           <div className="font-display font-bold text-white tabular-nums text-lg">
-            {Math.round(pct)}<span className="text-[#C8A951] text-sm">%</span>
+            {pct}<span className="text-[#C8A951] text-sm">%</span>
           </div>
-        </div> */}
+        </div>
       </div>
     </div>
   );

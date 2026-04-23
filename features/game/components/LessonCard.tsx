@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 import type { Lesson, LessonState } from "../types";
@@ -37,9 +38,13 @@ export function LessonCard({ lesson, onStart }: LessonCardProps) {
   );
 
   return (
-    <article
+    <motion.article
       aria-label={`Lesson ${lesson.id}: ${lesson.title}`}
       className="relative rounded-2xl overflow-hidden"
+      initial={{ opacity: 0, y: 18, scale: 0.97 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: -14, scale: 0.97 }}
+      transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
       style={{
         background: "linear-gradient(180deg, #12213F 0%, #0A1628 100%)",
         border: `1px solid ${accent}66`,
@@ -134,7 +139,7 @@ export function LessonCard({ lesson, onStart }: LessonCardProps) {
           </p>
         </div>
       </div>
-    </article>
+    </motion.article>
   );
 }
 

@@ -1,5 +1,6 @@
 "use client";
 
+import { AnimatePresence, motion } from "framer-motion";
 import { GoldButton } from "@/features/game/components/Atoms";
 import { LESSONS } from "@/features/game/data";
 import { useGame } from "@/features/game/GameContext";
@@ -14,15 +15,13 @@ function ResultsContent() {
   const router = useRouter();
   const locale = useLocale();
   const t = useTranslations("results");
-  const { xp, level, xpIntoLevel, xpForLevel, nextThreshold, getLessonState } =
-    useGame();
+  const { xp, level, xpIntoLevel, xpForLevel, nextThreshold, getLessonState } = useGame();
 
   const lessonId = parseInt(id as string, 10);
   const lesson = LESSONS.find((l) => l.id === lessonId);
   const correct = parseInt(searchParams.get("correct") || "0", 10);
   const total = parseInt(searchParams.get("total") || "1", 10);
-
-  const [xpAnim, setXpAnim] = useState(0);
+  const prevLevel = parseInt(searchParams.get("prevLevel") || "0", 10);
 
   const pct = correct / total;
   let stars = 0;
@@ -31,27 +30,48 @@ function ResultsContent() {
   else if (pct > 0) stars = 1;
 
   const earnedXp = lesson ? lesson.xp + correct * 10 : 0;
+  const leveledUp = prevLevel > 0 && level > prevLevel;
 
+  const [xpAnim, setXpAnim] = useState(0);
+  const [showLevelUp, setShowLevelUp] = useState(false);
+  const [starsRevealed, setStarsRevealed] = useState(0);
+
+  // Animated XP counter (tick up)
   useEffect(() => {
     let i = 0;
-    const t = setInterval(() => {
+    const interval = setInterval(() => {
       i += Math.max(1, Math.round(earnedXp / 40));
       if (i >= earnedXp) {
         setXpAnim(earnedXp);
-        clearInterval(t);
+        clearInterval(interval);
       } else {
         setXpAnim(i);
       }
     }, 30);
-    return () => clearInterval(t);
+    return () => clearInterval(interval);
   }, [earnedXp]);
 
+  // Stagger star reveals
+  useEffect(() => {
+    if (stars === 0) return;
+    let count = 0;
+    const interval = setInterval(() => {
+      count++;
+      setStarsRevealed(count);
+      if (count >= stars) clearInterval(interval);
+    }, 300);
+    return () => clearInterval(interval);
+  }, [stars]);
+
+  // Level-up overlay (show after initial animations settle)
+  useEffect(() => {
+    if (!leveledUp) return;
+    const timer = setTimeout(() => setShowLevelUp(true), 2_200);
+    return () => clearTimeout(timer);
+  }, [leveledUp]);
+
   const nextLesson = useMemo(
-    () =>
-      LESSONS.find(
-        (l) =>
-          getLessonState(l.id) === "unlocked" || getLessonState(l.id) === "active",
-      ),
+    () => LESSONS.find(l => getLessonState(l.id) === "unlocked" || getLessonState(l.id) === "active"),
     [getLessonState],
   );
 
@@ -64,25 +84,75 @@ function ResultsContent() {
     <div className="max-w-3xl mx-auto pt-4 relative">
       <Confetti />
 
-      <div
+      {/* Level-up overlay */}
+      <AnimatePresence>
+        {showLevelUp && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center"
+            style={{ background: "rgba(5,12,24,0.85)", backdropFilter: "blur(8px)" }}
+            onClick={() => setShowLevelUp(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.7, opacity: 0, y: 32 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.8, opacity: 0, y: 20 }}
+              transition={{ type: "spring", stiffness: 380, damping: 22 }}
+              onClick={(e) => e.stopPropagation()}
+              className="text-center px-10 py-8 rounded-3xl max-w-xs w-full mx-4"
+              style={{
+                background: "linear-gradient(135deg, #1B2A4A 0%, #0A1628 100%)",
+                border: "1px solid rgba(244,217,122,0.6)",
+                boxShadow: "0 0 60px rgba(200,169,81,0.3)",
+              }}
+            >
+              <motion.div
+                animate={{ rotate: [0, -12, 12, -6, 6, 0] }}
+                transition={{ delay: 0.2, duration: 0.7 }}
+                className="text-5xl mb-3"
+                aria-hidden
+              >
+                🏅
+              </motion.div>
+              <div className="text-[11px] tracking-[0.3em] text-[#F4D97A] uppercase mb-1">Level Up!</div>
+              <div className="font-display text-6xl font-bold text-white mb-2">{level}</div>
+              <div className="text-sm text-[#F5EED6]/70 mb-5">Science Explorer · Rank {level}</div>
+              <motion.button
+                onClick={() => setShowLevelUp(false)}
+                className="px-8 py-2.5 rounded-xl font-display font-bold text-sm tracking-[0.1em]"
+                whileTap={{ scale: 0.97 }}
+                style={{ background: "linear-gradient(180deg, #F4D97A, #C8A951)", color: "#0A1628" }}
+              >
+                Awesome!
+              </motion.button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
         className="relative rounded-2xl overflow-hidden"
         style={{
           background: "linear-gradient(180deg, #12213F 0%, #0A1628 100%)",
           border: "1px solid rgba(244,217,122,0.5)",
         }}
       >
-        <svg
-          className="absolute inset-0 w-full h-full pointer-events-none opacity-40"
-          aria-hidden
-        >
+        <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-40" aria-hidden>
           <rect width="100%" height="100%" fill="url(#mashrabiya)" />
         </svg>
 
         <div className="relative p-10 text-center">
           {/* UAE Flag */}
-          <div
+          <motion.div
+            initial={{ opacity: 0, y: -16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
             className="flex justify-center mb-4"
-            style={{ animation: "fadeSlideUp 0.5s ease-out" }}
           >
             <svg
               width="80"
@@ -90,43 +160,58 @@ function ResultsContent() {
               viewBox="0 0 80 52"
               style={{ animation: "flagWave 1.5s ease-in-out infinite" }}
             >
-              <rect x="0" y="0" width="18" height="52" fill="#EF3340" />
-              <rect x="18" y="0" width="62" height="17" fill="#009A44" />
+              <rect x="0"  y="0"  width="18" height="52" fill="#EF3340" />
+              <rect x="18" y="0"  width="62" height="17" fill="#009A44" />
               <rect x="18" y="17" width="62" height="18" fill="#F5EED6" />
               <rect x="18" y="35" width="62" height="17" fill="#0A1628" />
             </svg>
-          </div>
+          </motion.div>
 
-          <div
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
             className="font-display text-[11px] tracking-[0.4em] uppercase text-[#F4D97A] mb-2"
-            style={{ animation: "fadeSlideUp 0.6s ease-out" }}
           >
             {t("lessonComplete")}
-          </div>
-          <h1
-            className={`text-4xl font-bold text-white ${
-              isAr ? "font-arabic" : "font-display"
-            }`}
+          </motion.div>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.4 }}
+            className={`text-4xl font-bold text-white ${isAr ? "font-arabic" : "font-display"}`}
             dir={isAr ? "rtl" : undefined}
-            style={{ animation: "fadeSlideUp 0.7s ease-out" }}
           >
             {t("congrats")}
-          </h1>
-          <div
+          </motion.h1>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.55 }}
             className="text-sm text-[#F5EED6]/70 mt-2"
-            style={{ animation: "fadeSlideUp 0.9s ease-out" }}
           >
             {t("mastered")}{" "}
             <span className="text-white font-semibold">{lesson.title}</span>
-          </div>
+          </motion.div>
 
-          {/* Stars */}
+          {/* Stars — Framer Motion spring + stagger */}
           <div className="flex justify-center gap-3 mt-8">
             {Array.from({ length: 3 }).map((_, i) => (
-              <div
+              <motion.div
                 key={i}
-                style={{
-                  animation: `starDrop 0.6s cubic-bezier(0.34,1.56,0.64,1) ${0.8 + i * 0.25}s both`,
+                initial={{ scale: 0, rotate: -25, opacity: 0 }}
+                animate={
+                  i < stars
+                    ? { scale: 1, rotate: 0, opacity: 1 }
+                    : { scale: 0.35, rotate: -15, opacity: 0.3 }
+                }
+                transition={{
+                  type: "spring",
+                  stiffness: 380,
+                  damping: 15,
+                  delay: 0.7 + i * 0.28,
                 }}
               >
                 <svg width="64" height="64" viewBox="0 0 64 64">
@@ -138,52 +223,53 @@ function ResultsContent() {
                     filter={i < stars ? "url(#softGlow)" : "none"}
                   />
                 </svg>
-              </div>
+              </motion.div>
             ))}
           </div>
-          <div className="mt-2 text-[10px] tracking-[0.3em] uppercase text-[#C8A951]">
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.4 }}
+            className="mt-2 text-[10px] tracking-[0.3em] uppercase text-[#C8A951]"
+          >
             {t("starsEarned", { stars })}
-          </div>
+          </motion.div>
 
           {/* XP + Score cards */}
-          <div className="grid grid-cols-2 gap-4 mt-8 max-w-md mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.75, duration: 0.4 }}
+            className="grid grid-cols-2 gap-4 mt-8 max-w-md mx-auto"
+          >
             <div
               className="rounded-xl p-4"
-              style={{
-                background: "rgba(244,217,122,0.1)",
-                border: "1px solid rgba(244,217,122,0.4)",
-              }}
+              style={{ background: "rgba(244,217,122,0.1)", border: "1px solid rgba(244,217,122,0.4)" }}
             >
-              <div className="text-[10px] tracking-[0.25em] uppercase text-[#C8A951]">
-                {t("xpEarned")}
-              </div>
+              <div className="text-[10px] tracking-[0.25em] uppercase text-[#C8A951]">{t("xpEarned")}</div>
               <div className="font-display text-3xl font-bold text-[#F4D97A] tabular-nums mt-1">
                 +{xpAnim}
               </div>
             </div>
             <div
               className="rounded-xl p-4"
-              style={{
-                background: "rgba(10,22,40,0.6)",
-                border: "1px solid rgba(200,169,81,0.3)",
-              }}
+              style={{ background: "rgba(10,22,40,0.6)", border: "1px solid rgba(200,169,81,0.3)" }}
             >
-              <div className="text-[10px] tracking-[0.25em] uppercase text-[#C8A951]">
-                {t("score")}
-              </div>
+              <div className="text-[10px] tracking-[0.25em] uppercase text-[#C8A951]">{t("score")}</div>
               <div className="font-display text-3xl font-bold text-white tabular-nums mt-1">
                 {correct}/{total}
               </div>
             </div>
-          </div>
+          </motion.div>
 
-          {/* Level progress */}
-          <div
+          {/* Level progress bar */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.95, duration: 0.4 }}
             className="mt-6 max-w-md mx-auto rounded-xl p-4"
-            style={{
-              background: "rgba(10,22,40,0.6)",
-              border: "1px solid rgba(200,169,81,0.3)",
-            }}
+            style={{ background: "rgba(10,22,40,0.6)", border: "1px solid rgba(200,169,81,0.3)" }}
           >
             <div className="flex items-center justify-between">
               <div>
@@ -191,10 +277,7 @@ function ResultsContent() {
                   {t("levelLabel", { level })}
                 </div>
                 <div className="text-xs text-[#F5EED6]/60 mt-0.5">
-                  {t("xpToLevel", {
-                    xp: (nextThreshold - xp).toLocaleString(),
-                    next: level + 1,
-                  })}
+                  {t("xpToLevel", { xp: (nextThreshold - xp).toLocaleString(), next: level + 1 })}
                 </div>
               </div>
               <div className="font-display text-xl font-bold text-white tabular-nums">
@@ -203,34 +286,37 @@ function ResultsContent() {
             </div>
             <div
               className="mt-3 h-2 rounded-full overflow-hidden"
-              style={{
-                background: "#0A1628",
-                border: "1px solid rgba(200,169,81,0.3)",
-              }}
+              style={{ background: "#0A1628", border: "1px solid rgba(200,169,81,0.3)" }}
             >
-              <div
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{ width: `${levelPct}%` }}
+                transition={{ delay: 1.1, duration: 1.6, ease: [0.22, 1, 0.36, 1] }}
                 style={{
-                  width: `${levelPct}%`,
                   height: "100%",
                   background: "linear-gradient(90deg, #EF3340, #F4D97A)",
-                  transition: "width 2s ease-out",
+                  boxShadow: "0 0 10px rgba(244,217,122,0.5)",
                 }}
               />
             </div>
-          </div>
+          </motion.div>
 
           {/* CTAs */}
-          <div className="mt-8 flex items-center justify-center gap-3 flex-wrap">
-            <button
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.15, duration: 0.4 }}
+            className="mt-8 flex items-center justify-center gap-3 flex-wrap"
+          >
+            <motion.button
               onClick={() => router.push("/")}
-              className="font-display font-bold tracking-[0.15em] text-sm px-6 py-2.5 rounded-lg transition-colors hover:bg-white/5"
-              style={{
-                border: "1px solid rgba(200,169,81,0.5)",
-                color: "#C8A951",
-              }}
+              className="font-display font-bold tracking-[0.15em] text-sm px-6 py-2.5 rounded-lg"
+              whileHover={{ backgroundColor: "rgba(255,255,255,0.06)" }}
+              whileTap={{ scale: 0.97 }}
+              style={{ border: "1px solid rgba(200,169,81,0.5)", color: "#C8A951" }}
             >
               {t("backToMap")}
-            </button>
+            </motion.button>
             <GoldButton
               onClick={() => {
                 if (nextLesson) router.push(`/lesson/${nextLesson.id}`);
@@ -239,9 +325,9 @@ function ResultsContent() {
             >
               {t("continueJourney")}
             </GoldButton>
-          </div>
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }
@@ -253,6 +339,8 @@ export default function ResultsPage() {
     </Suspense>
   );
 }
+
+/* ─── Confetti ───────────────────────────────────────────────────────────── */
 
 function Confetti() {
   const colors = ["#EF3340", "#009A44", "#F4D97A", "#F5EED6", "#C8A951"];
@@ -266,17 +354,18 @@ function Confetti() {
         rotate: Math.random() * 360,
         size: 6 + Math.random() * 6,
       })),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
 
   return (
-    <div
-      className="absolute inset-0 pointer-events-none overflow-hidden"
-      style={{ zIndex: 1 }}
-    >
+    <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 1 }}>
       {particles.map((p, i) => (
-        <div
+        <motion.div
           key={i}
+          initial={{ y: -20, opacity: 1, rotate: p.rotate }}
+          animate={{ y: "100vh", opacity: 0, rotate: p.rotate + 720 }}
+          transition={{ duration: p.duration, delay: p.delay, ease: "linear", repeat: Infinity }}
           style={{
             position: "absolute",
             top: -20,
@@ -284,9 +373,7 @@ function Confetti() {
             width: p.size,
             height: p.size,
             background: p.color,
-            transform: `rotate(${p.rotate}deg)`,
             borderRadius: i % 2 === 0 ? "2px" : "50%",
-            animation: `confettiFall ${p.duration}s linear ${p.delay}s infinite`,
           }}
         />
       ))}

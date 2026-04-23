@@ -1,15 +1,20 @@
+import { motion } from "framer-motion";
 import React from "react";
 
 interface GoldButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
 }
 
-export function GoldButton({ children, className = "", disabled, ...props }: GoldButtonProps) {
+export function GoldButton({ children, className = "", disabled, onClick, ...props }: GoldButtonProps) {
   return (
-    <button
-      {...props}
+    <motion.button
+      {...(props as object)}
       disabled={disabled}
-      className={`relative group font-display font-bold tracking-[0.15em] text-sm px-6 py-2.5 rounded-lg overflow-hidden transition-transform active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F4D97A]/80 disabled:cursor-not-allowed ${className}`}
+      onClick={onClick}
+      className={`relative group font-display font-bold tracking-[0.15em] text-sm px-6 py-2.5 rounded-lg overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F4D97A]/80 disabled:cursor-not-allowed ${className}`}
+      whileHover={!disabled ? { scale: 1.04, y: -1 } : {}}
+      whileTap={!disabled ? { scale: 0.97 } : {}}
+      transition={{ duration: 0.15 }}
       style={{
         background: disabled
           ? "linear-gradient(180deg, #2B3A55 0%, #1B2A4A 100%)"
@@ -26,8 +31,7 @@ export function GoldButton({ children, className = "", disabled, ...props }: Gol
           aria-hidden
           className="absolute inset-0 pointer-events-none motion-reduce:hidden"
           style={{
-            background:
-              "linear-gradient(110deg, transparent 35%, rgba(255,255,255,0.6) 50%, transparent 65%)",
+            background: "linear-gradient(110deg, transparent 35%, rgba(255,255,255,0.6) 50%, transparent 65%)",
             animation: "game-shimmer 2.8s linear infinite",
           }}
         />
@@ -35,7 +39,7 @@ export function GoldButton({ children, className = "", disabled, ...props }: Gol
       <span className="relative flex items-center justify-center gap-2">
         {children}
       </span>
-    </button>
+    </motion.button>
   );
 }
 
