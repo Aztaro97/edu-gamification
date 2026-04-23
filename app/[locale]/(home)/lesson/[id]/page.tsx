@@ -1,10 +1,10 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
 import { MashrabiyaBand } from "@/features/game/components/MashrabiyaBand";
 import { LESSONS } from "@/features/game/data";
 import { useGame } from "@/features/game/GameContext";
 import { useRouter } from "@/i18n/navigation";
+import { AnimatePresence, motion } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -215,9 +215,10 @@ export default function LessonPage() {
           exit="exit"
           className="relative rounded-2xl overflow-hidden"
           style={{
-            background: "linear-gradient(180deg, #12213F 0%, #0A1628 100%)",
-            border: "1px solid rgba(239,51,64,0.33)",
-          }}
+          background:
+            "linear-gradient(110deg, #1B2A4A 0%, #0A1628 55%, #3B2514 100%)",
+          border: "1px solid rgba(244,217,122,0.45)",
+        }}
         >
           <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-30" aria-hidden>
             <rect width="100%" height="100%" fill="url(#lattice)" />
