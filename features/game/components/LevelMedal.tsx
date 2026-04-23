@@ -12,24 +12,27 @@ export function LevelMedal({ level }: LevelMedalProps) {
         aria-hidden
         focusable="false"
       >
+        {/* Outer star — gold gradient */}
         <polygon
-          points="22,2 27,8 35,6 35,14 41,19 35,24 35,32 27,30 22,38 17,30 9,32 9,24 3,19 9,14 9,6 17,8"
+          points="22,2 26,8 34,7 35,15 41,20 35,25 35,33 26,31 22,39 18,31 9,33 9,25 3,20 9,15 9,7 18,8"
           fill="url(#goldGrad)"
           stroke="#F4D97A"
           strokeWidth="1"
         />
-        <circle
-          cx="22"
-          cy="20"
-          r="10"
-          fill="#0A1628"
-          stroke="#F4D97A"
-          strokeWidth="1"
-        />
+        {/* Deep-space inner circle */}
+        <circle cx="22" cy="21" r="11.5" fill="#0A1628" stroke="#F4D97A" strokeWidth="0.8" />
+        {/* Decorative inner ring */}
+        <circle cx="22" cy="21" r="9" fill="none" stroke="#C8A951" strokeWidth="0.4" opacity="0.6" />
+        {/* Cardinal accent dots on inner ring */}
+        <circle cx="22" cy="12" r="0.8" fill="#F4D97A" />
+        <circle cx="31" cy="21" r="0.8" fill="#F4D97A" />
+        <circle cx="22" cy="30" r="0.8" fill="#F4D97A" />
+        <circle cx="13" cy="21" r="0.8" fill="#F4D97A" />
       </svg>
+      {/* Level number */}
       <div
         className="absolute inset-0 flex items-center justify-center font-display font-bold text-[#F4D97A] text-sm"
-        style={{ paddingBottom: 6 }}
+        style={{ paddingBottom: 2 }}
       >
         {level}
       </div>

@@ -5,6 +5,7 @@ import { authClient } from "@/lib/auth-client";
 import { useLocale, useTranslations } from "next-intl";
 import { useGame } from "../GameContext";
 import { MashrabiyaBand } from "./MashrabiyaBand";
+import { XpGem } from "./XpGem";
 
 type HeaderIconName = "book" | "map" | "trophy" | "user" | "sun";
 
@@ -128,31 +129,14 @@ export function Header() {
 
           {/* XP badge */}
           <div
-            className="flex items-center gap-2 px-3 py-1.5 rounded-full"
+            className="flex items-center px-3 py-1.5 rounded-full"
             style={{
               background:
                 "linear-gradient(90deg, rgba(244,217,122,0.18), rgba(239,51,64,0.12))",
               border: "1px solid rgba(244,217,122,0.5)",
             }}
           >
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 14 14"
-              aria-hidden
-              focusable="false"
-            >
-              <polygon
-                points="7,1 9,5 13,5 10,8 11,13 7,10 3,13 4,8 1,5 5,5"
-                fill="#F4D97A"
-              />
-            </svg>
-            <span className="font-display text-[#F4D97A] font-bold tabular-nums text-xs">
-              {xp.toLocaleString()}
-            </span>
-            <span className="text-[9px] text-[#F5EED6]/70 uppercase tracking-wider">
-              XP
-            </span>
+            <XpGem value={xp} size={14} />
           </div>
 
           {/* Language toggle */}

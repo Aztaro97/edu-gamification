@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { GoldButton } from "@/features/game/components/Atoms";
+import { LevelUpMedal } from "@/features/game/components/LevelUpMedal";
 import { LESSONS } from "@/features/game/data";
 import { useGame } from "@/features/game/GameContext";
 import { useRouter } from "@/i18n/navigation";
@@ -111,10 +112,10 @@ function ResultsContent() {
               <motion.div
                 animate={{ rotate: [0, -12, 12, -6, 6, 0] }}
                 transition={{ delay: 0.2, duration: 0.7 }}
-                className="text-5xl mb-3"
+                className="flex justify-center mb-3"
                 aria-hidden
               >
-                🏅
+                <LevelUpMedal size={56} />
               </motion.div>
               <div className="text-[11px] tracking-[0.3em] text-[#F4D97A] uppercase mb-1">Level Up!</div>
               <div className="font-display text-6xl font-bold text-white mb-2">{level}</div>

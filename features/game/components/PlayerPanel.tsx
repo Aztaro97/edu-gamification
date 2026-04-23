@@ -2,13 +2,13 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { BADGES, PLAYER } from "../data";
+import { useGame } from "../GameContext";
 import { ArchFrame } from "./ArchFrame";
 import { GlassPanel } from "./Atoms";
 import { Avatar } from "./Avatar";
 import { BadgeMark } from "./Badge";
 import { LevelMedal } from "./LevelMedal";
 import { StreakFlame } from "./StreakFlame";
-import { useGame } from "../GameContext";
 
 interface PlayerPanelProps {
   xpPct?: number;
